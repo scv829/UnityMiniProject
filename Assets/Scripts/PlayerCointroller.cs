@@ -9,22 +9,22 @@ public class PlayerCointroller : MonoBehaviour
     [SerializeField] float moveSpeed;
     [SerializeField] float runSpeed;
     [SerializeField] float rotateSpeed;
-    [SerializeField] float attackDamage;
-    [SerializeField] float attackSpeed;
     [SerializeField] int hp;
+    [SerializeField] int maxHp;
 
     private void Update()
     {
         Move();
         Rotate();
-        
     }
 
     private void Move()
     {
         float z = Input.GetAxis("Vertical");
 
-        transform.Translate(Vector3.forward * z * moveSpeed * Time.deltaTime);
+        float speed = (Input.GetButton("Jump") && hp == maxHp)  ? moveSpeed * 2f : moveSpeed;
+
+        transform.Translate(Vector3.forward * z * speed * Time.deltaTime);
     }
 
     private void Rotate()

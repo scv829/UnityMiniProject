@@ -24,18 +24,14 @@ public class AttackRange : MonoBehaviour
 
     private void Attack()
     {
-        // 공격 범위에 적이 들어와 있는데 공격을 안하고 있다?
         if (attackTarget != null && attackCoroutine == null)
         {
-            // 공격 시작
-            Debug.Log("공격 시작");
+            Debug.Log("Attack Start");
             attackCoroutine = StartCoroutine(attacking());
         }
-        // 공격 범위에서 나갔는데 공격을 하고 있다?
         else if(attackTarget == null && attackCoroutine != null)
         {
-            Debug.Log("공격 정지!");
-            // 공격을 멈추기
+            Debug.Log("Attack Stop!");
             StopCoroutine(attackCoroutine);
             attackCoroutine = null;
         }
@@ -43,11 +39,9 @@ public class AttackRange : MonoBehaviour
 
     private IEnumerator attacking()
     {
-        // 공격 범위안에 들어온 친구를 타겟으로
         while(true)
         {
             GameObject instance = Instantiate(attackPrefab, transform.parent.transform.position, Quaternion.identity);
-            // 공격 속도에 비례해서 공격을 한다(=> 프리펩을 날린다)
             instance.GetComponent<AttackObejct>().SetTarget(attackTarget);
             yield return new WaitForSeconds(attackSpeed);
         }
@@ -58,7 +52,6 @@ public class AttackRange : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy") && attackTarget == null )
         {
-            Debug.Log("Attack");
             attackTarget = other.transform;
         }
     }
@@ -68,7 +61,6 @@ public class AttackRange : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy") && attackTarget == null)
         {
-            Debug.Log("stayAttack");
             attackTarget = other.transform;
         }
     }

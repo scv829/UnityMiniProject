@@ -19,7 +19,7 @@ public class AttackObejct : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log($"{collision.gameObject.name} ¸ÂÃã!");
+        Debug.Log($"{collision.gameObject.name} Hit!");
         Destroy(gameObject);
     }
 }

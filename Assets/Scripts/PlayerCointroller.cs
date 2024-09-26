@@ -11,18 +11,26 @@ public class PlayerCointroller : MonoBehaviour
     [SerializeField] float rotateSpeed;
     [SerializeField] int hp;
     [SerializeField] int maxHp;
+    [SerializeField] bool isDead;
+
+    public void TakeDamage(int damage)
+    {
+        hp -= damage;
+        if (hp <= 0) isDead = true;
+    }
 
     private void Update()
     {
         Move();
         Rotate();
+        if (isDead) { Debug.Log("PlayerDead"); Destroy(gameObject); }
     }
 
     private void Move()
     {
         float z = Input.GetAxis("Vertical");
 
-        float speed = (Input.GetButton("Jump") && hp == maxHp)  ? moveSpeed * 2f : moveSpeed;
+        float speed = (Input.GetButton("Jump") && hp == maxHp)  ? runSpeed : moveSpeed;
 
         transform.Translate(Vector3.forward * z * speed * Time.deltaTime);
     }

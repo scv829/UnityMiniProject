@@ -67,7 +67,7 @@ public class AttackRange : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.Equals(attackTarget.gameObject))
+        if(attackTarget != null && other.gameObject.Equals(attackTarget.gameObject))
         {
             attackTarget = null;
         }

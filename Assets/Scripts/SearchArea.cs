@@ -7,11 +7,15 @@ public class SearchArea : MonoBehaviour
     [Header("Search")]
     [SerializeField] Transform target;
 
+    [Header("Target_LayerMask")]
+    [SerializeField] LayerMask targetLayerMask;
+
     public Transform Target { get { return target; } }
+
 
     private void OnTriggerEnter(Collider other)
     {
-        if ( (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Nexus")) && target == null)
+        if ( ((targetLayerMask & (1 << other.gameObject.layer)) != 0)  && target == null)
         {
             target = other.transform;
         }
@@ -19,7 +23,7 @@ public class SearchArea : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if ((other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Nexus")) && target == null)
+        if (((targetLayerMask & (1 << other.gameObject.layer)) != 0) && target == null)
         {
             target = other.transform;
         }
@@ -27,6 +31,7 @@ public class SearchArea : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+
         if (target != null && other.gameObject.Equals(target.gameObject))
         {
             target = null;

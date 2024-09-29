@@ -12,10 +12,13 @@ public class AttackObejct : MonoBehaviour
     {
         this.target = target;
         this.damage = damage;
+
+        gameObject.layer = target.CompareTag("Enemy") ? 8 : 9;
     }
 
     private void Update()
     {
+        if(target == null) Destroy(gameObject);
         transform.position = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
     }
 

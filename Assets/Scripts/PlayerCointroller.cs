@@ -16,6 +16,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
 
     [Header("UI")]
     [SerializeField] Slider hpBar;
+    [SerializeField] Image targetScope;
     [SerializeField] float offset;
 
     [Header("Attack")]
@@ -45,6 +46,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
         hpBar.maxValue = maxHp;
         hpBar.value = hp;
         hpBar.gameObject.SetActive(false);
+        targetScope.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -78,16 +80,20 @@ public class PlayerCointroller : MonoBehaviour, IHit
     {
         if (attackArea.Target != null && attackCoroutine == null)
         {
+            targetScope.gameObject.SetActive(true);
             Debug.Log("Attack Start");
             attackCoroutine = StartCoroutine(attacking());
         }
         else if (attackArea.Target == null && attackCoroutine != null)
         {
+            targetScope.gameObject.SetActive(false);
             Debug.Log("Attack Stop!");
             StopCoroutine(attackCoroutine);
             attackCoroutine = null;
         }
         
+        if(attackArea.Target != null)
+            targetScope.transform.position = Camera.main.WorldToScreenPoint(attackArea.Target.position);
     }
 
     private IEnumerator attacking()

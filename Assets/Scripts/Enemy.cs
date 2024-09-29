@@ -3,16 +3,17 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IHit
 {
     [Header("Property")]
     [SerializeField] SearchArea searchArea;
     [SerializeField] NavMeshAgent agent;
+    [SerializeField] float hp;
     [Header("Attack")]
     [SerializeField] AttackArea attackArea;
     [SerializeField] Transform baseTarget;
-    [SerializeField] float attackRange;
-    private float realAttackRange;
+    [SerializeField] float attackSpeed;
+    [SerializeField] float attackDamage;
     [Header("State")]
     [SerializeField] State curState;
     public enum State { Trace, Attack, Die, Size }
@@ -28,9 +29,6 @@ public class Enemy : MonoBehaviour
         states[(int)State.Trace] = new TraceState(this);
         states[(int)State.Attack] = new AttackState(this);
         states[(int)State.Die] = new DieState(this);
-        realAttackRange = GetComponent<CapsuleCollider>().radius + attackRange;
-
-        isStop = agent.isStopped;
     }
 
     private void Start()
@@ -52,12 +50,11 @@ public class Enemy : MonoBehaviour
         states[(int)curState].Enter();
     }
 
-    private void OnDrawGizmos()
+    public void TakeDamage(float damage)
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, (realAttackRange * realAttackRange));
+        hp -=  damage;
+        if(hp <= 0) ChangeState(State.Die);
     }
-
 
     private class TraceState : BaseState
     {
@@ -73,9 +70,10 @@ public class Enemy : MonoBehaviour
             enemy.agent.destination = targetPosition;
 
 
-            // if AttackArea in player or Nexus
-            if (enemy.attackArea.Target != null && enemy.attackArea.Target.Equals(enemy.searchArea.Target))
+            // 공격 범위안에 들어왔으며 적이 피격가능한 오브젝트일 때
+            if (enemy.attackArea.Target != null && enemy.attackArea.Target.GetComponent<IHit>() is IHit)
             {
+                // 공격 실행
                 enemy.ChangeState(State.Attack);
             }
         }
@@ -84,11 +82,7 @@ public class Enemy : MonoBehaviour
 
     private class AttackState : BaseState
     {
-        [SerializeField] GameObject attackPrefab;
-        [SerializeField] float attackDamage;
-        [SerializeField] float attackSpeed;
         [SerializeField] Enemy enemy;
-        [SerializeField] Vector3 targetPosition;
         private Coroutine attackCoroutine;
 
         public AttackState(Enemy enemy) { this.enemy = enemy; }
@@ -102,8 +96,6 @@ public class Enemy : MonoBehaviour
 
         public override void Update()
         {
-            targetPosition = (enemy.searchArea.Target != null) ? enemy.searchArea.Target.position : enemy.baseTarget.position;
-            enemy.agent.destination = targetPosition;
 
             if (enemy.attackArea.Target == null)
             {
@@ -124,8 +116,8 @@ public class Enemy : MonoBehaviour
 
             while (true)
             {
-                Debug.LogWarning($"{enemy.name} is Attaking!");
-                yield return new WaitForSeconds(attackSpeed);
+                enemy.attackArea.Target.GetComponent<IHit>().TakeDamage(enemy.attackDamage);
+                yield return new WaitForSeconds(enemy.attackSpeed);
             }
         }
     }

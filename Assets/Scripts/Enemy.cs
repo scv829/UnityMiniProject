@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 
 public class Enemy : MonoBehaviour, IHit
@@ -14,6 +15,9 @@ public class Enemy : MonoBehaviour, IHit
     [SerializeField] Transform baseTarget;
     [SerializeField] float attackSpeed;
     [SerializeField] float attackDamage;
+    [Header("UI")]
+    [SerializeField] Slider hpBar;
+    [SerializeField] float offset;
     [Header("State")]
     [SerializeField] State curState;
     public enum State { Trace, Attack, Die, Size }
@@ -33,6 +37,9 @@ public class Enemy : MonoBehaviour, IHit
 
     private void Start()
     {
+        hpBar.maxValue = hp;
+        hpBar.value = hp;
+        hpBar.gameObject.SetActive(false);
         baseTarget = GameObject.FindWithTag("Nexus").transform;
         curState = State.Trace;
         states[(int)curState].Enter();
@@ -40,6 +47,7 @@ public class Enemy : MonoBehaviour, IHit
 
     private void Update()
     {
+        hpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, transform.localScale.y + offset, 0));
         states[(int)curState].Update();
     }
 
@@ -50,10 +58,16 @@ public class Enemy : MonoBehaviour, IHit
         states[(int)curState].Enter();
     }
 
+
     public void TakeDamage(float damage)
     {
-        hp -=  damage;
-        if(hp <= 0) ChangeState(State.Die);
+        hpBar.gameObject.SetActive(true);
+        hp -= damage;
+        if (hp <= 0)
+        {
+            ChangeState(State.Die);
+        }
+        hpBar.value = hp;
     }
 
     private class TraceState : BaseState

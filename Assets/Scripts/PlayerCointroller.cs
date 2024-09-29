@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerCointroller : MonoBehaviour, IHit
 {
@@ -12,6 +13,10 @@ public class PlayerCointroller : MonoBehaviour, IHit
     [SerializeField] float hp;
     [SerializeField] float maxHp;
     [SerializeField] bool isDead;
+
+    [Header("UI")]
+    [SerializeField] Slider hpBar;
+    [SerializeField] float offset;
 
     [Header("Attack")]
     [SerializeField] AttackArea attackArea;
@@ -32,6 +37,14 @@ public class PlayerCointroller : MonoBehaviour, IHit
     private void Awake()
     {
         attackCoroutine = null;
+        hp = maxHp;
+    }
+
+    private void Start()
+    {
+        hpBar.maxValue = maxHp;
+        hpBar.value = hp;
+        hpBar.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -40,6 +53,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
         Rotate();
         Attack();
         if (isDead) { Debug.Log("PlayerDead"); Destroy(gameObject); }
+
     }
 
     private void Move()
@@ -49,6 +63,8 @@ public class PlayerCointroller : MonoBehaviour, IHit
         float speed = (Input.GetButton("Jump") && hp == maxHp)  ? runSpeed : moveSpeed;
 
         transform.Translate(Vector3.forward * z * speed * Time.deltaTime);
+
+        hpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, transform.localScale.y + offset, 0));
     }
 
     private void Rotate()
@@ -71,6 +87,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
             StopCoroutine(attackCoroutine);
             attackCoroutine = null;
         }
+        
     }
 
     private IEnumerator attacking()
@@ -85,10 +102,12 @@ public class PlayerCointroller : MonoBehaviour, IHit
 
     public void TakeDamage(float damage)
     {
+        hpBar.gameObject.SetActive(true);
         hp -= damage;
         if (hp <= 0)
         {
             isDead = true;
         }
+        hpBar.value = hp;
     }
 }

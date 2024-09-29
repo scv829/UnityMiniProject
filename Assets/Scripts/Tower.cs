@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tower : MonoBehaviour, IHit
 {
@@ -20,6 +21,10 @@ public class Tower : MonoBehaviour, IHit
     public enum State { Idle, Attack, Die, Size }
     BaseState[] states = new BaseState[(int)State.Size];
 
+    [Header("UI")]
+    [SerializeField] Slider hpBar;
+    [SerializeField] float offset;
+
     private void Awake()
     {
         states[(int)State.Idle] = new IdleState(this);
@@ -29,12 +34,16 @@ public class Tower : MonoBehaviour, IHit
 
     private void Start()
     {
+        hpBar.maxValue = hp;
+        hpBar.value = hp;
+        hpBar.gameObject.SetActive(false);
         curState = State.Idle;
         states[(int)curState].Enter();
     }
 
     private void Update()
     {
+        hpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, transform.localScale.y + offset, 0));
         states[(int)curState].Update();
     }
 
@@ -47,11 +56,13 @@ public class Tower : MonoBehaviour, IHit
 
     public void TakeDamage(float damage)
     {
+        hpBar.gameObject.SetActive(true);
         hp -= damage;
         if (hp <= 0)
         {
             ChangeState(State.Die);
         }
+        hpBar.value = hp;
     }
 
     private class IdleState : BaseState

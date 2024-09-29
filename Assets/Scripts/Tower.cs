@@ -66,7 +66,7 @@ public class Tower : MonoBehaviour, IHit
         public override void Update()
         {
             // 공격 범위 안에 적이 들어왔을 때
-            if(tower.attackArea.Target != null && tower.attackArea.Target.CompareTag("Enemy"))
+            if (tower.attackArea.Target != null)
             {
                 // 공격 시작
                 tower.ChangeState(State.Attack);
@@ -117,8 +117,8 @@ public class Tower : MonoBehaviour, IHit
 
             while (true)
             {
-                // 일단 로그로 남기기
-                Debug.LogWarning($"{tower.name} is Attaking!");
+                GameObject instance = Instantiate(tower.attackPrefab, tower.transform.position, Quaternion.identity);
+                instance.GetComponent<AttackObejct>().Setting(tower.attackArea.Target, tower.attackDamage);
                 yield return new WaitForSeconds(tower.attackSpeed);
             }
         }

@@ -42,7 +42,7 @@ public class AttackRange : MonoBehaviour
         while(true)
         {
             GameObject instance = Instantiate(attackPrefab, transform.parent.transform.position, Quaternion.identity);
-            instance.GetComponent<AttackObejct>().SetTarget(attackTarget);
+            instance.GetComponent<AttackObejct>().Setting(attackTarget, attackDamage);
             yield return new WaitForSeconds(attackSpeed);
         }
     }

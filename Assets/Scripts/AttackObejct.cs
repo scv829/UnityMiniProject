@@ -6,10 +6,12 @@ public class AttackObejct : MonoBehaviour
 {
     [SerializeField] Transform target;
     [SerializeField] float moveSpeed;
+    [SerializeField] float damage;
 
-    public void SetTarget(Transform target)
+    public void Setting(Transform target, float damage)
     {
         this.target = target;
+        this.damage = damage;
     }
 
     private void Update()
@@ -19,7 +21,10 @@ public class AttackObejct : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log($"{collision.gameObject.name} Hit!");
+        if (collision.gameObject.GetComponent<IHit>() is IHit)
+        {
+            collision.gameObject.GetComponent<IHit>().TakeDamage(damage);
+        }
         Destroy(gameObject);
     }
 }

@@ -365,7 +365,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 3
+  m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &196941212
 Transform:
@@ -376,7 +376,7 @@ Transform:
   m_GameObject: {fileID: 196941208}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1536827536}
@@ -574,7 +574,6 @@ GameObject:
   - component: {fileID: 375784699}
   - component: {fileID: 375784702}
   - component: {fileID: 375784701}
-  - component: {fileID: 375784700}
   m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
@@ -597,19 +596,6 @@ Transform:
   m_Father: {fileID: 1533476717}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &375784700
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 375784698}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &375784701
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1228,8 +1214,8 @@ MonoBehaviour:
   attackArea: {fileID: 196941209}
   attackRange: 0
   attackPrefab: {fileID: 7931242100935656658, guid: b0d6d243aa159cb4c887d4b26de2dfc3, type: 3}
-  attackDamage: 0
-  attackSpeed: 0
+  attackDamage: 1
+  attackSpeed: 1
   targetPosition: {x: 0, y: 0, z: 0}
   curState: 0
 --- !u!208 &1068896239
@@ -1414,9 +1400,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   searchArea: {fileID: 1851981996}
   agent: {fileID: 0}
+  hp: 10
   attackArea: {fileID: 985169255}
   baseTarget: {fileID: 0}
-  attackRange: 0
+  attackSpeed: 1
+  attackDamage: 1
   curState: 0
   isStop: 0
 --- !u!195 &1438956514
@@ -1715,7 +1703,8 @@ GameObject:
   - component: {fileID: 1605216062}
   - component: {fileID: 1605216061}
   - component: {fileID: 1605216065}
-  m_Layer: 0
+  - component: {fileID: 1605216066}
+  m_Layer: 6
   m_Name: Nexus
   m_TagString: Nexus
   m_Icon: {fileID: 0}
@@ -1816,6 +1805,19 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &1605216066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605216060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08d620fcd831dfa4abfb5cfa34fe8837, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 10
 --- !u!1 &1851981994
 GameObject:
   m_ObjectHideFlags: 0

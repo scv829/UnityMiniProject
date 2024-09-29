@@ -119,6 +119,8 @@ public class Tower : MonoBehaviour, IHit
             {
                 // 일단 로그로 남기기
                 Debug.LogWarning($"{tower.name} is Attaking!");
+                GameObject instance = Instantiate(tower.attackPrefab, tower.transform.position, Quaternion.identity);
+                instance.GetComponent<AttackObejct>().Setting(tower.attackArea.Target, tower.attackDamage);
                 yield return new WaitForSeconds(tower.attackSpeed);
             }
         }

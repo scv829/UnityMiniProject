@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCointroller : MonoBehaviour
+public class PlayerCointroller : MonoBehaviour, IHit
 {
     [Header("Property")]
     [SerializeField] float moveSpeed;
     [SerializeField] float runSpeed;
     [SerializeField] float rotateSpeed;
-    [SerializeField] int hp;
-    [SerializeField] int maxHp;
+    [SerializeField] float hp;
+    [SerializeField] float maxHp;
     [SerializeField] bool isDead;
 
     [Header("Attack")]
@@ -78,9 +78,17 @@ public class PlayerCointroller : MonoBehaviour
         while (true)
         {
             GameObject instance = Instantiate(attackPrefab, transform.position, Quaternion.identity);
-            instance.GetComponent<AttackObejct>().SetTarget(attackArea.Target);
+            instance.GetComponent<AttackObejct>().Setting(attackArea.Target, attackDamage);
             yield return new WaitForSeconds(attackSpeed);
         }
     }
 
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
+        if (hp <= 0)
+        {
+            isDead = true;
+        }
+    }
 }

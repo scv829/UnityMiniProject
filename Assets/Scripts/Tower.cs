@@ -25,6 +25,9 @@ public class Tower : MonoBehaviour, IHit
     [SerializeField] Slider hpBar;
     [SerializeField] float offset;
 
+    [Header("Die")]
+    [SerializeField] GameObject dieEffect;
+
     private void Awake()
     {
         states[(int)State.Idle] = new IdleState(this);
@@ -148,6 +151,9 @@ public class Tower : MonoBehaviour, IHit
         public override void Enter()
         {
             Destroy(tower.gameObject);
+            GameObject obj = Instantiate(tower.dieEffect);
+            obj.transform.position = tower.transform.position;
+            Destroy(obj, 2f);
         }
     }
 

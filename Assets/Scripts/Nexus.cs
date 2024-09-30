@@ -9,6 +9,8 @@ public class Nexus : MonoBehaviour, IHit
     [Header("UI")]
     [SerializeField] Slider hpBar;
     [SerializeField] float offset;
+    [Header("Die")]
+    [SerializeField] GameObject dieEffect;
 
     private void Start()
     {
@@ -29,8 +31,12 @@ public class Nexus : MonoBehaviour, IHit
         if (hp <= 0)
         {
             Debug.Log("Gameover");
-            Time.timeScale = 0f;
             Destroy(gameObject);
+            GameObject obj = Instantiate(dieEffect);
+            obj.transform.position = transform.position;
+            Destroy(obj, 2f);
+
+            Time.timeScale = 0f;
         }
         hpBar.value = hp;
     }

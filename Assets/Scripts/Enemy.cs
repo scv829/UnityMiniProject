@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -26,6 +27,13 @@ public class Enemy : MonoBehaviour, IHit
     public enum State { Trace, Attack, Die, Size }
     BaseState[] states = new BaseState[(int)State.Size];
     private Coroutine setTargetCoroutine;
+    [Header("Object_Pool")]
+    [SerializeField] EnemyPool returnPoll;
+    [SerializeField] EnemyType enemyType;
+    public enum EnemyType { Trace, Attack, Die, Size }
+
+    public int Type { set { enemyType = (EnemyType)value; } }
+    public EnemyPool ReturnPoll { set { returnPoll = value; } }
 
     private void Awake()
     {
@@ -37,7 +45,7 @@ public class Enemy : MonoBehaviour, IHit
         states[(int)State.Die] = new DieState(this);
     }
 
-    private void Start()
+    private void OnEnable()
     {
         hpBar.maxValue = hp;
         hpBar.value = hp;

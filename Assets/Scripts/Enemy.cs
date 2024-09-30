@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour, IHit
     [SerializeField] SearchArea searchArea;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] float hp;
+    [SerializeField] Animator animator;
     [Header("Attack")]
     [SerializeField] AttackArea attackArea;
     [SerializeField] Transform baseTarget;
@@ -23,12 +24,11 @@ public class Enemy : MonoBehaviour, IHit
     public enum State { Trace, Attack, Die, Size }
     BaseState[] states = new BaseState[(int)State.Size];
     private Coroutine setTargetCoroutine;
-    [SerializeField] bool isStop;
-
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
 
         states[(int)State.Trace] = new TraceState(this);
         states[(int)State.Attack] = new AttackState(this);
@@ -103,6 +103,7 @@ public class Enemy : MonoBehaviour, IHit
 
         public override void Enter()
         {
+            enemy.animator.SetBool("IsAttack", true);
             Debug.Log("enemy Attack Start");
             attackCoroutine = enemy.StartCoroutine(attacking());
             enemy.agent.isStopped = !enemy.agent.isStopped;
@@ -119,6 +120,7 @@ public class Enemy : MonoBehaviour, IHit
 
         public override void Exit()
         {
+            enemy.animator.SetBool("IsAttack", false);
             Debug.Log("enemy Attack Stop!");
             enemy.StopCoroutine(attackCoroutine);
             attackCoroutine = null;

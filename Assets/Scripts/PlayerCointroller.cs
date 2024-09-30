@@ -13,6 +13,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
     [SerializeField] float hp;
     [SerializeField] float maxHp;
     [SerializeField] bool isDead;
+    [SerializeField] Animator animator;
 
     [Header("UI")]
     [SerializeField] Slider hpBar;
@@ -39,6 +40,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
     {
         attackCoroutine = null;
         hp = maxHp;
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
@@ -67,6 +69,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
         transform.Translate(Vector3.forward * z * speed * Time.deltaTime);
 
         hpBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, transform.localScale.y + offset, 0));
+        animator.SetFloat("Speed", speed * z);
     }
 
     private void Rotate()
@@ -80,12 +83,14 @@ public class PlayerCointroller : MonoBehaviour, IHit
     {
         if (attackArea.Target != null && attackCoroutine == null)
         {
+            animator.SetBool("IsAttack", true);
             targetScope.gameObject.SetActive(true);
             Debug.Log("Attack Start");
             attackCoroutine = StartCoroutine(attacking());
         }
         else if (attackArea.Target == null && attackCoroutine != null)
         {
+            animator.SetBool("IsAttack", false);
             targetScope.gameObject.SetActive(false);
             Debug.Log("Attack Stop!");
             StopCoroutine(attackCoroutine);

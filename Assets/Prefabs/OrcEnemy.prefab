@@ -587,14 +587,15 @@ MonoBehaviour:
   searchArea: {fileID: 6977822574050013137}
   agent: {fileID: 0}
   hp: 20
+  animator: {fileID: 0}
   attackArea: {fileID: 6977822574924483762}
   baseTarget: {fileID: 0}
   attackSpeed: 2
   attackDamage: 2
+  dieEffect: {fileID: 4825124900785505853, guid: 47d596a594b414e4abd154419c639547, type: 3}
   hpBar: {fileID: 9184347151394778905}
   offset: 0
   curState: 0
-  dieEffect: {fileID: 4825124900785505853, guid: 47d596a594b414e4abd154419c639547, type: 3}
 --- !u!1 &1688076015196956771
 GameObject:
   m_ObjectHideFlags: 0

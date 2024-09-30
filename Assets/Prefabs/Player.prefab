@@ -3782,6 +3782,7 @@ MonoBehaviour:
   hp: 0
   maxHp: 10
   isDead: 0
+  animator: {fileID: 0}
   hpBar: {fileID: 6129165715276382377}
   targetScope: {fileID: 435661233850165634}
   offset: 0
@@ -3791,6 +3792,7 @@ MonoBehaviour:
   attackDamage: 1
   attackSpeed: 1
   targetPosition: {x: 0, y: 0, z: 0}
+  dieEffect: {fileID: 0}
 --- !u!136 &6522679910223720490
 CapsuleCollider:
   m_ObjectHideFlags: 0

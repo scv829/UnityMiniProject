@@ -7,6 +7,7 @@ public class AttackObejct : MonoBehaviour
     [SerializeField] Transform target;
     [SerializeField] float moveSpeed;
     [SerializeField] float damage;
+    [SerializeField] Rigidbody rigid;
 
     public void Setting(Transform target, float damage)
     {
@@ -14,12 +15,22 @@ public class AttackObejct : MonoBehaviour
         this.damage = damage;
 
         gameObject.layer = target.CompareTag("Enemy") ? 8 : 9;
+        rigid.velocity = Vector3.up * moveSpeed;
+    }
+
+    public void Awake()
+    {
+        rigid = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
         if(target == null) Destroy(gameObject);
-        transform.position = Vector3.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
+
+        transform.position += transform.up * moveSpeed * Time.deltaTime;
+
+        Vector3 dir = (target.position - transform.position).normalized;
+        transform.up = Vector3.Lerp(transform.up, dir, 0.25f);
     }
 
     private void OnCollisionEnter(Collision collision)

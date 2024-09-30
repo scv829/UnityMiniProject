@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Enemy;
 
 public class EnemyPool : MonoBehaviour
 {
@@ -67,7 +66,7 @@ public class EnemyPool : MonoBehaviour
                     enemies[i]--;
                     enemyPool[i].RemoveAt(count - 1);
 
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSeconds(2f);
                 }
             }
         }

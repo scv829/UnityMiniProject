@@ -28,6 +28,9 @@ public class PlayerCointroller : MonoBehaviour, IHit
     [SerializeField] float attackSpeed;
     [SerializeField] Vector3 targetPosition;
 
+    [Header("Die")]
+    [SerializeField] GameObject dieEffect;
+
     private Coroutine attackCoroutine;
 
     public void TakeDamage(int damage)
@@ -56,7 +59,15 @@ public class PlayerCointroller : MonoBehaviour, IHit
         Move();
         Rotate();
         Attack();
-        if (isDead) { Debug.Log("PlayerDead"); Destroy(gameObject); }
+        if (isDead) 
+        { 
+            Debug.Log("PlayerDead"); 
+            Destroy(gameObject);
+
+            GameObject obj = Instantiate(dieEffect);
+            obj.transform.position = transform.position;
+            Destroy(obj, 2f);
+        }
 
     }
 

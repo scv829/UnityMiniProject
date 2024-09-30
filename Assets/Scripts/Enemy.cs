@@ -16,6 +16,8 @@ public class Enemy : MonoBehaviour, IHit
     [SerializeField] Transform baseTarget;
     [SerializeField] float attackSpeed;
     [SerializeField] float attackDamage;
+    [Header("Die")]
+    [SerializeField] GameObject dieEffect;
     [Header("UI")]
     [SerializeField] Slider hpBar;
     [SerializeField] float offset;
@@ -148,6 +150,9 @@ public class Enemy : MonoBehaviour, IHit
         {
             Debug.Log($"{enemy.name} is Dead");
             Destroy(enemy.gameObject);
+            GameObject obj = Instantiate(enemy.dieEffect);
+            obj.transform.position = enemy.transform.position;
+            Destroy(obj, 2f);
         }
     }
 

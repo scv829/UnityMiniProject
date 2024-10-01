@@ -35,6 +35,7 @@ Transform:
   m_Children:
   - {fileID: 9168359911386760497}
   - {fileID: 3758731602476134946}
+  - {fileID: 5082958439898275232}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -83.634, z: 0}
@@ -117,6 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 10
+  hitPoint: {fileID: 3155205125916095849}
   attackArea: {fileID: 9168359911278947476}
   attackRange: 0
   attackPrefab: {fileID: 814637833033622479, guid: 1fbfb032e44612543880279388984f41, type: 3}
@@ -126,6 +128,7 @@ MonoBehaviour:
   curState: 0
   hpBar: {fileID: 3758731601700539417}
   offset: 0
+  dieEffect: {fileID: 0}
 --- !u!65 &7615161977167403521
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -139,6 +142,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 6.484896, y: 5.3236704, z: 6.7564993}
   m_Center: {x: 0.00000059604656, y: 2.641955, z: -0.1358011}
+--- !u!1 &3155205125916095849
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5082958439898275232}
+  m_Layer: 6
+  m_Name: HitPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5082958439898275232
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3155205125916095849}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1270909587194547583}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3758731601700539419
 GameObject:
   m_ObjectHideFlags: 0

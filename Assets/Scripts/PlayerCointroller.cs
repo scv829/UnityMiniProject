@@ -15,6 +15,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
     [SerializeField] float maxHp;
     [SerializeField] bool isDead;
     [SerializeField] Animator animator;
+    [SerializeField] GameObject hitPoint;
 
     [Header("UI")]
     [SerializeField] Slider hpBar;
@@ -23,13 +24,13 @@ public class PlayerCointroller : MonoBehaviour, IHit
 
     [Header("Attack")]
     [SerializeField] AttackArea attackArea;
-    [SerializeField] float attackRange;
     [SerializeField] GameObject attackPrefab;
     [SerializeField] float attackDamage;
     [SerializeField] float attackSpeed;
     [SerializeField] float attackCoolTime;
     [SerializeField] float currentAttackCoolTime;
     [SerializeField] Vector3 targetPosition;
+    [SerializeField] Transform muzzlePoint;
 
     [Header("Die")]
     [SerializeField] GameObject dieEffect;
@@ -153,5 +154,10 @@ public class PlayerCointroller : MonoBehaviour, IHit
             isDead = true;
         }
         hpBar.value = hp;
+    }
+
+    public Transform HitPoint()
+    {
+        return hitPoint.transform;
     }
 }

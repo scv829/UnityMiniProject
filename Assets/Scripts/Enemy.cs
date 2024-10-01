@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -12,21 +11,27 @@ public class Enemy : MonoBehaviour, IHit
     [SerializeField] NavMeshAgent agent;
     [SerializeField] float hp;
     [SerializeField] Animator animator;
+    [SerializeField] GameObject hitPoint;
+
     [Header("Attack")]
     [SerializeField] AttackArea attackArea;
     [SerializeField] Transform baseTarget;
     [SerializeField] float attackSpeed;
     [SerializeField] float attackDamage;
+
     [Header("Die")]
     [SerializeField] GameObject dieEffect;
+
     [Header("UI")]
     [SerializeField] Slider hpBar;
     [SerializeField] float offset;
+
     [Header("State")]
     [SerializeField] State curState;
     public enum State { Trace, Attack, Die, Size }
     BaseState[] states = new BaseState[(int)State.Size];
     private Coroutine setTargetCoroutine;
+
     [Header("Object_Pool")]
     [SerializeField] EnemyPool returnPoll;
     [SerializeField] EnemyType enemyType;
@@ -80,6 +85,11 @@ public class Enemy : MonoBehaviour, IHit
         hpBar.value = hp;
     }
 
+    public Transform HitPoint()
+    {
+        return hitPoint.transform;
+    }
+
     private class TraceState : BaseState
     {
         [SerializeField] Enemy enemy;
@@ -92,7 +102,6 @@ public class Enemy : MonoBehaviour, IHit
             // Trace
             targetPosition = (enemy.searchArea.Target != null) ? enemy.searchArea.Target.position : enemy.baseTarget.position;
             enemy.agent.destination = targetPosition;
-
 
             // 공격 범위안에 들어왔으며 적이 피격가능한 오브젝트일 때
             if (enemy.attackArea.Target != null && enemy.attackArea.Target.GetComponent<IHit>() is IHit)
@@ -109,6 +118,7 @@ public class Enemy : MonoBehaviour, IHit
         [SerializeField] Enemy enemy;
         [SerializeField] float attackCoolTime;
         [SerializeField] float currentAttackCoolTime;
+        
         private Coroutine attackCoroutine;
 
         public AttackState(Enemy enemy) { 

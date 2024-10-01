@@ -7,6 +7,7 @@ public class Tower : MonoBehaviour, IHit
 {
     [Header("Property")]
     [SerializeField] float hp;
+    [SerializeField] GameObject hitPoint;
 
     [Header("Attack")]
     [SerializeField] AttackArea attackArea;
@@ -66,6 +67,11 @@ public class Tower : MonoBehaviour, IHit
             ChangeState(State.Die);
         }
         hpBar.value = hp;
+    }
+
+    public Transform HitPoint()
+    {
+        return hitPoint.transform;
     }
 
     private class IdleState : BaseState

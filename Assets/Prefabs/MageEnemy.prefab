@@ -429,6 +429,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   hp: 5
   animator: {fileID: 0}
+  hitPoint: {fileID: 5920304258105999074}
   attackArea: {fileID: 4362721697817886430}
   baseTarget: {fileID: 0}
   attackSpeed: 1
@@ -437,6 +438,8 @@ MonoBehaviour:
   hpBar: {fileID: 3681358947337622578}
   offset: 0
   curState: 0
+  returnPoll: {fileID: 0}
+  enemyType: 0
 --- !u!1 &5920211515705271530
 GameObject:
   m_ObjectHideFlags: 0

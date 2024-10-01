@@ -40,4 +40,9 @@ public class Nexus : MonoBehaviour, IHit
         }
         hpBar.value = hp;
     }
+
+    public Transform HitPoint()
+    {
+        return gameObject.transform;
+    }
 }

@@ -107,21 +107,33 @@ public class Enemy : MonoBehaviour, IHit
     private class AttackState : BaseState
     {
         [SerializeField] Enemy enemy;
+        [SerializeField] float attackCoolTime;
+        [SerializeField] float currentAttackCoolTime;
         private Coroutine attackCoroutine;
 
-        public AttackState(Enemy enemy) { this.enemy = enemy; }
+        public AttackState(Enemy enemy) { 
+            this.enemy = enemy;
+
+            // 공격 속도에 따른 애니메이션 배속 설정
+            attackCoolTime = 1f / enemy.attackSpeed;
+            
+            if (enemy.attackSpeed > 1) enemy.animator.SetFloat("AttackSpeed", enemy.attackSpeed);
+            else enemy.animator.SetFloat("AttackSpeed", 1);
+
+            // 처음 공격할 때는 바로 공격
+            currentAttackCoolTime = attackCoolTime;
+        }
 
         public override void Enter()
         {
-            enemy.animator.SetBool("IsAttack", true);
             Debug.Log("enemy Attack Start");
             attackCoroutine = enemy.StartCoroutine(attacking());
+            
             enemy.agent.isStopped = !enemy.agent.isStopped;
         }
 
         public override void Update()
         {
-
             if (enemy.attackArea.Target == null)
             {
                 enemy.ChangeState(State.Trace);
@@ -130,7 +142,6 @@ public class Enemy : MonoBehaviour, IHit
 
         public override void Exit()
         {
-            enemy.animator.SetBool("IsAttack", false);
             Debug.Log("enemy Attack Stop!");
             enemy.StopCoroutine(attackCoroutine);
             attackCoroutine = null;
@@ -142,8 +153,19 @@ public class Enemy : MonoBehaviour, IHit
 
             while (true)
             {
-                enemy.attackArea.Target.GetComponent<IHit>().TakeDamage(enemy.attackDamage);
-                yield return new WaitForSeconds(enemy.attackSpeed);
+                // 만약 공격 쿨타임이 돌았으면
+                if(currentAttackCoolTime >= attackCoolTime)
+                {
+                    // 쿨타임 초기화
+                    currentAttackCoolTime = 0f;
+                    // 공격 개시
+                    enemy.animator.SetTrigger("AttackTrigger");
+                    enemy.attackArea.Target.GetComponent<IHit>().TakeDamage(enemy.attackDamage);
+                }
+                
+                currentAttackCoolTime += Time.deltaTime;
+                // 쿨타임을 매 프레임으로 확인 
+                yield return null;
             }
         }
     }

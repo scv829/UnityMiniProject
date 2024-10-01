@@ -28,12 +28,13 @@ public class AttackObejct : MonoBehaviour
 
     private void Update()
     {
+        // 날아가는 도중 타겟이 죽었을 때
         if(target == null) Destroy(gameObject);
-
-        transform.position += transform.up * moveSpeed * Time.deltaTime;
-
-        Vector3 dir = (target.position - transform.position).normalized;
-        transform.up = Vector3.Lerp(transform.up, dir, 0.25f);
+        else
+        {
+            transform.LookAt(target);
+            transform.position = Vector3.MoveTowards(transform.position, target.position, 0.03f);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

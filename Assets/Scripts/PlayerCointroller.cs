@@ -88,7 +88,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
     {
         float z = Input.GetAxis("Vertical");
 
-        float speed = (Input.GetButton("Jump") && hp == maxHp)  ? runSpeed : moveSpeed;
+        float speed = (Input.GetKey(KeyCode.LeftShift) && hp == maxHp)  ? runSpeed : moveSpeed;
 
         transform.Translate(Vector3.forward * z * speed * Time.deltaTime);
 

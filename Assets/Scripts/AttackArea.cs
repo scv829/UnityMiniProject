@@ -12,12 +12,33 @@ public class AttackArea : MonoBehaviour
 
     public Transform Target { get { return target; } }
 
+    public void ResetTarget()
+    {
+        target = null;
+    }
+
+    private void SetEvent()
+    {
+        if (target.gameObject.GetComponent<Enemy>() != null)
+        {
+            target.gameObject.GetComponent<Enemy>().dieEvent.AddListener(ResetTarget);
+        }
+    }
+
+    private void ResetEvent()
+    {
+        if (target.gameObject.GetComponent<Enemy>() != null)
+        {
+            target.gameObject.GetComponent<Enemy>().dieEvent.RemoveListener(ResetTarget);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if ( ((targetLayerMask & (1 << other.gameObject.layer)) != 0) && target == null)
         {
             target = other.transform;
+            SetEvent();
         }
     }
 
@@ -26,7 +47,9 @@ public class AttackArea : MonoBehaviour
         if ( ( (targetLayerMask & (1 << other.gameObject.layer) ) != 0) 
             && target == null)
         {
+            ResetEvent();
             target = other.transform;
+            SetEvent();
         }
     }
 
@@ -34,6 +57,7 @@ public class AttackArea : MonoBehaviour
     {
         if (target != null && other.gameObject.Equals(target.gameObject))
         {
+            ResetTarget();
             target = null;
         }
     }

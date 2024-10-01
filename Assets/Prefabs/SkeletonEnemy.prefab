@@ -2012,6 +2012,7 @@ MonoBehaviour:
   dieEvent:
     m_PersistentCalls:
       m_Calls: []
+  dropItem: {fileID: 8341794621064422333, guid: e8b710ce5973ae94d8443a4d8b0a2c14, type: 3}
   hpBar: {fileID: 7474672522055112427}
   offset: 0
   curState: 0

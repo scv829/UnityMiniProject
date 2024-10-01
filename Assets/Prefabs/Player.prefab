@@ -3783,15 +3783,18 @@ MonoBehaviour:
   maxHp: 10
   isDead: 0
   animator: {fileID: 0}
+  hitPoint: {fileID: 1537881468943122988}
   hpBar: {fileID: 6129165715276382377}
   targetScope: {fileID: 435661233850165634}
   offset: 0
   attackArea: {fileID: 3041515050594476915}
-  attackRange: 0
   attackPrefab: {fileID: 814637833033622479, guid: 1fbfb032e44612543880279388984f41, type: 3}
   attackDamage: 1
   attackSpeed: 1
+  attackCoolTime: 0
+  currentAttackCoolTime: 0
   targetPosition: {x: 0, y: 0, z: 0}
+  muzzlePoint: {fileID: 383283593752058233}
   dieEffect: {fileID: 0}
 --- !u!136 &6522679910223720490
 CapsuleCollider:

@@ -11,11 +11,14 @@ public class AttackObejct : MonoBehaviour
 
     public void Setting(Transform target, float damage)
     {
-        this.target = target;
+        // 공격 피사체의 맞는 부분
+        this.target = target.gameObject.GetComponent<IHit>().HitPoint();
+        // 공격 데미지
         this.damage = damage;
 
+        // 적이 날린 투사체 -> 플레이어만
+        // 플레이어가 날린 투사체 -> 적만
         gameObject.layer = target.CompareTag("Enemy") ? 8 : 9;
-        rigid.velocity = Vector3.up * moveSpeed;
     }
 
     public void Awake()
@@ -25,12 +28,13 @@ public class AttackObejct : MonoBehaviour
 
     private void Update()
     {
+        // 날아가는 도중 타겟이 죽었을 때
         if(target == null) Destroy(gameObject);
-
-        transform.position += transform.up * moveSpeed * Time.deltaTime;
-
-        Vector3 dir = (target.position - transform.position).normalized;
-        transform.up = Vector3.Lerp(transform.up, dir, 0.25f);
+        else
+        {
+            transform.LookAt(target);
+            transform.position = Vector3.MoveTowards(transform.position, target.position, 0.03f);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

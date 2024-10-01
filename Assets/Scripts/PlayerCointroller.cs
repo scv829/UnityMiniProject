@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class PlayerCointroller : MonoBehaviour, IHit
 {
@@ -14,6 +15,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
     [SerializeField] float maxHp;
     [SerializeField] bool isDead;
     [SerializeField] Animator animator;
+    [SerializeField] GameObject hitPoint;
 
     [Header("UI")]
     [SerializeField] Slider hpBar;
@@ -22,11 +24,13 @@ public class PlayerCointroller : MonoBehaviour, IHit
 
     [Header("Attack")]
     [SerializeField] AttackArea attackArea;
-    [SerializeField] float attackRange;
     [SerializeField] GameObject attackPrefab;
     [SerializeField] float attackDamage;
     [SerializeField] float attackSpeed;
+    [SerializeField] float attackCoolTime;
+    [SerializeField] float currentAttackCoolTime;
     [SerializeField] Vector3 targetPosition;
+    [SerializeField] Transform muzzlePoint;
 
     [Header("Die")]
     [SerializeField] GameObject dieEffect;
@@ -48,9 +52,18 @@ public class PlayerCointroller : MonoBehaviour, IHit
 
     private void Start()
     {
+        // hp 바 설정
         hpBar.maxValue = maxHp;
         hpBar.value = hp;
         hpBar.gameObject.SetActive(false);
+
+        // 공격 속도에 따른 애니메이션 배속 설정
+        attackCoolTime = 1f / attackSpeed;
+
+        if (attackSpeed > 1) animator.SetFloat("AttackSpeed", attackSpeed);
+        else animator.SetFloat("AttackSpeed", 1);
+
+
         targetScope.gameObject.SetActive(false);
     }
 
@@ -94,14 +107,13 @@ public class PlayerCointroller : MonoBehaviour, IHit
     {
         if (attackArea.Target != null && attackCoroutine == null)
         {
-            animator.SetBool("IsAttack", true);
             targetScope.gameObject.SetActive(true);
+            animator.SetTrigger("AttackTrigger");
             Debug.Log("Attack Start");
             attackCoroutine = StartCoroutine(attacking());
         }
         else if (attackArea.Target == null && attackCoroutine != null)
         {
-            animator.SetBool("IsAttack", false);
             targetScope.gameObject.SetActive(false);
             Debug.Log("Attack Stop!");
             StopCoroutine(attackCoroutine);
@@ -116,9 +128,20 @@ public class PlayerCointroller : MonoBehaviour, IHit
     {
         while (true)
         {
-            GameObject instance = Instantiate(attackPrefab, transform.position, Quaternion.identity);
-            instance.GetComponent<AttackObejct>().Setting(attackArea.Target, attackDamage);
-            yield return new WaitForSeconds(attackSpeed);
+            // 만약 공격 쿨타임이 돌았으면
+            if (currentAttackCoolTime >= attackCoolTime)
+            {
+                // 쿨타임 초기화
+                currentAttackCoolTime = 0f;
+                // 공격 개시
+                animator.SetTrigger("AttackTrigger");
+                // 화살 프리팹으로 공격
+                GameObject instance = Instantiate(attackPrefab, muzzlePoint.position, Quaternion.identity);
+                instance.GetComponent<AttackObejct>().Setting(attackArea.Target, attackDamage);
+            }
+
+            currentAttackCoolTime += Time.deltaTime;
+            yield return null;
         }
     }
 
@@ -131,5 +154,10 @@ public class PlayerCointroller : MonoBehaviour, IHit
             isDead = true;
         }
         hpBar.value = hp;
+    }
+
+    public Transform HitPoint()
+    {
+        return hitPoint.transform;
     }
 }

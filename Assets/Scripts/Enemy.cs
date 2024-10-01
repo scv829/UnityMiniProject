@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour, IHit
     [Header("Die")]
     [SerializeField] GameObject dieEffect;
     [SerializeField] public UnityEvent dieEvent;
+    [SerializeField] GameObject dropItem;
 
     [Header("UI")]
     [SerializeField] Slider hpBar;
@@ -195,9 +196,16 @@ public class Enemy : MonoBehaviour, IHit
             // 이 풀에 회수되면 죽은거라고 알려줘야 함
             enemy.dieEvent?.Invoke();
 
+            // 사망 이펙트
             GameObject obj = Instantiate(enemy.dieEffect);
             obj.transform.position = enemy.transform.position;
             Destroy(obj, 2f);
+
+            // 사망시 아이템 드랍
+            GameObject coin = Instantiate(enemy.dropItem);
+            coin.transform.position = enemy.transform.position;
+
+            // 풀에 회수
             enemy.returnPoll.ReturnPool((int)enemy.enemyType, enemy);
 
             // 폴에 회수되고 연결된 모든 오브젝트를 끊어줌

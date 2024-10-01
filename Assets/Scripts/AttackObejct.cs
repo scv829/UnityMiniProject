@@ -19,17 +19,33 @@ public class AttackObejct : MonoBehaviour
         // 적이 날린 투사체 -> 플레이어만
         // 플레이어가 날린 투사체 -> 적만
         gameObject.layer = target.CompareTag("Enemy") ? 8 : 9;
+
+        // 만약 적일 경우
+        if(target.CompareTag("Enemy"))
+        {
+            // 해당 적이 오브젝트 풀로 돌아갔을 때 발생할 함수 추가
+            target.GetComponent<Enemy>().dieEvent.AddListener(Remove);
+        }
     }
 
-    public void Awake()
+    public void Remove()
+    {
+        Destroy(gameObject);
+    }
+
+    private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        // 날아가는 도중 타겟이 죽었을 때
-        if(target == null) Destroy(gameObject);
+        // 적: 타겟이 없을 때
+        // 플레이어: 날아가는 도중 타겟이 비활성화 될 때
+        if (target == null)
+        {
+            Remove();
+        }
         else
         {
             transform.LookAt(target);
@@ -45,4 +61,7 @@ public class AttackObejct : MonoBehaviour
         }
         Destroy(gameObject);
     }
+
+
+
 }

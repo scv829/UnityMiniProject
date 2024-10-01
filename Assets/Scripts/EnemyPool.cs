@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemyPool : MonoBehaviour
@@ -9,12 +10,14 @@ public class EnemyPool : MonoBehaviour
     [SerializeField] List<Enemy>[] enemyPool;   // 적이 들어 있는 오브젝트 풀
     [SerializeField] Transform spawnPoint;      // 스폰 포인트
 
-    [SerializeField] int[] enemies;             // 각 적의 수
-    [SerializeField] int[] spanwEnemeies;       // 이번 웨이브에 소환할 적의 수
+    [SerializeField] int[] enemies;             // 풀에 들어있는 몬스터의 수
+    [SerializeField] int[] spanwEnemeies;       // 이번 웨이브에 소환할 각 타입의 몬스터의 수
+    [SerializeField] int totalEnemiesCount;     // 이번 웨이브에 등장하는 모든 적의 수
 
     private void Awake()
     {
         enemies = new int[enemyPrefabs.Length];
+        spanwEnemeies = new int[enemyPrefabs.Length];
         enemyPool = new List<Enemy>[enemyPrefabs.Length];
 
         for (int i = 0; i < enemyPrefabs.Length; i++)
@@ -37,6 +40,17 @@ public class EnemyPool : MonoBehaviour
     }
 
     private void Start()
+    {
+        Setting();
+    }
+
+    public void Setting()
+    {
+        GameManager.instance.GetWave(ref spanwEnemeies);
+        totalEnemiesCount = spanwEnemeies.Sum();
+    }
+
+    public void StartSpawning()
     {
         StartCoroutine(spawnStart());
     }
@@ -74,10 +88,19 @@ public class EnemyPool : MonoBehaviour
 
     public void ReturnPool(int index, Enemy enemy)
     {
+        // 죽은 몬스터는 다시 풀로
         enemies[index]++;
         enemy.gameObject.SetActive(false);
         enemy.transform.parent = transform;
         enemyPool[index].Add(enemy);
+
+        // 그리고 몬스터 한마리 감소
+        totalEnemiesCount--;
+
+        if(totalEnemiesCount <= 0)
+        {
+            GameManager.instance.WaveClear();
+        }
     }
 
 }

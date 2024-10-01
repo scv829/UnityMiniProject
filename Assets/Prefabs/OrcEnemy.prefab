@@ -594,6 +594,9 @@ MonoBehaviour:
   attackSpeed: 2
   attackDamage: 2
   dieEffect: {fileID: 4825124900785505853, guid: 47d596a594b414e4abd154419c639547, type: 3}
+  dieEvent:
+    m_PersistentCalls:
+      m_Calls: []
   hpBar: {fileID: 9184347151394778905}
   offset: 0
   curState: 0
@@ -2571,7 +2574,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3758731602476134950, guid: 5df743d0df794ef45a96bb3c7e0a2de0, type: 3}
       propertyPath: m_Name
-      value: Canvas
+      value: HPCanvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5df743d0df794ef45a96bb3c7e0a2de0, type: 3}

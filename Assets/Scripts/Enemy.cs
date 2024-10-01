@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 
@@ -21,6 +22,7 @@ public class Enemy : MonoBehaviour, IHit
 
     [Header("Die")]
     [SerializeField] GameObject dieEffect;
+    [SerializeField] public UnityEvent dieEvent;
 
     [Header("UI")]
     [SerializeField] Slider hpBar;
@@ -35,7 +37,7 @@ public class Enemy : MonoBehaviour, IHit
     [Header("Object_Pool")]
     [SerializeField] EnemyPool returnPoll;
     [SerializeField] EnemyType enemyType;
-    public enum EnemyType { Trace, Attack, Die, Size }
+    public enum EnemyType { Skeleton, Orc, Maze, Size }
 
     public int Type { set { enemyType = (EnemyType)value; } }
     public EnemyPool ReturnPoll { set { returnPoll = value; } }
@@ -100,9 +102,11 @@ public class Enemy : MonoBehaviour, IHit
         public override void Update()
         {
             // Trace
-            targetPosition = (enemy.searchArea.Target != null) ? enemy.searchArea.Target.position : enemy.baseTarget.position;
-            enemy.agent.destination = targetPosition;
-
+            if(enemy.baseTarget != null)
+            {
+                targetPosition = (enemy.searchArea.Target != null) ? enemy.searchArea.Target.position : enemy.baseTarget.position;
+                enemy.agent.destination = targetPosition;
+            }
             // 공격 범위안에 들어왔으며 적이 피격가능한 오브젝트일 때
             if (enemy.attackArea.Target != null && enemy.attackArea.Target.GetComponent<IHit>() is IHit)
             {
@@ -188,11 +192,16 @@ public class Enemy : MonoBehaviour, IHit
 
         public override void Enter()
         {
-            Debug.Log($"{enemy.name} is Dead");
-            Destroy(enemy.gameObject);
+            // 이 풀에 회수되면 죽은거라고 알려줘야 함
+            enemy.dieEvent?.Invoke();
+
             GameObject obj = Instantiate(enemy.dieEffect);
             obj.transform.position = enemy.transform.position;
             Destroy(obj, 2f);
+            enemy.returnPoll.ReturnPool((int)enemy.enemyType, enemy);
+
+            // 폴에 회수되고 연결된 모든 오브젝트를 끊어줌
+            enemy.dieEvent.RemoveAllListeners();
         }
     }
 

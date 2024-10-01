@@ -100,9 +100,11 @@ public class Enemy : MonoBehaviour, IHit
         public override void Update()
         {
             // Trace
-            targetPosition = (enemy.searchArea.Target != null) ? enemy.searchArea.Target.position : enemy.baseTarget.position;
-            enemy.agent.destination = targetPosition;
-
+            if(enemy.baseTarget != null)
+            {
+                targetPosition = (enemy.searchArea.Target != null) ? enemy.searchArea.Target.position : enemy.baseTarget.position;
+                enemy.agent.destination = targetPosition;
+            }
             // 공격 범위안에 들어왔으며 적이 피격가능한 오브젝트일 때
             if (enemy.attackArea.Target != null && enemy.attackArea.Target.GetComponent<IHit>() is IHit)
             {

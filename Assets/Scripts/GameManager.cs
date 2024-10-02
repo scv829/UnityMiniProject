@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
 using System.Text;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -15,7 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] bool isBuildNexus;     // 본진을 지었는지 확인
     [SerializeField] GameObject tutorial;
 
-    public bool BuildNexus { get { return isBuildNexus; } set { isBuildNexus = value; tutorial.SetActive(false);  } }
+    public bool BuildNexus { get { return isBuildNexus; } set { isBuildNexus = value; tutorial.SetActive(false); } }
 
     // 웨이브에 대한 정보
     [Header("Wave")]
@@ -57,7 +56,11 @@ public class GameManager : MonoBehaviour
 
     private StringBuilder textStringBuilder;
     private Coroutine holdingCoroutine;
-    
+
+    [Space]
+    [Header("Sound")]
+    [SerializeField] AudioClip audioClip;
+
 
     public void GetWave(ref int[] wave)
     {
@@ -230,10 +233,19 @@ public class GameManager : MonoBehaviour
         gameResultText.SetText(textStringBuilder);
     }
 
-    public void ReturnMenu()
+    public void StartGame()
     {
-        // Scene 매니저로 씬 전환하는 부분
-        Debug.Log("씬 전환!");
+        SceneManager.LoadScene("GameScene");
     }
 
+    public void ReturnMenu()
+    {
+        SceneManager.LoadScene("StartScene");
+    }
+
+    public void QuitGame()
+    {
+        UnityEditor.EditorApplication.isPlaying = false;
+        Application.Quit();
+    }
 }

@@ -2445,7 +2445,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9168359911386760496, guid: 1db1991d268d97143bb4c120d6a92068, type: 3}
       propertyPath: m_Name
-      value: Attack
+      value: Area
       objectReference: {fileID: 0}
     - target: {fileID: 9168359911386760496, guid: 1db1991d268d97143bb4c120d6a92068, type: 3}
       propertyPath: m_IsActive

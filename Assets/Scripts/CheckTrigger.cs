@@ -5,10 +5,11 @@ using UnityEngine;
 public class CheckTrigger : MonoBehaviour
 {
     [SerializeField] TutorialScript script;
+    [SerializeField] int n;
 
     private void OnTriggerEnter(Collider other)
     {
-        script.ShowCommnet();
+        script.ShowCommnet(n);
     }
 
     private void OnTriggerExit(Collider other)

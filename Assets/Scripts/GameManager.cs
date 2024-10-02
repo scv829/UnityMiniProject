@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] bool isBuildNexus;     // 본진을 지었는지 확인
     [SerializeField] GameObject tutorial;
 
-    public bool BuildNexus { get { return isBuildNexus; } set { isBuildNexus = value; tutorial.SetActive(false); } }
+    public bool BuildNexus { get { return isBuildNexus; } set { isBuildNexus = value; } }
 
     // 웨이브에 대한 정보
     [Header("Wave")]
@@ -168,6 +168,7 @@ public class GameManager : MonoBehaviour
         gaugeSlider.gameObject.SetActive(false);
         chargeTimeText.gameObject.SetActive(false);
 
+        if(tutorial != null) tutorial.SetActive(false);
         startWave?.Invoke();
         isStartWave = true;
         SetText();

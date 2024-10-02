@@ -22,20 +22,20 @@ public class TutorialScript : MonoBehaviour
 
     private void Start()
     {
-        ShowCommnet();
+        ShowCommnet(0);
     }
 
     private void Update()
     {
-        if (GameManager.instance.BuildNexus && currentComment < comments.Length) ShowCommnet();
+        if (GameManager.instance.BuildNexus && currentComment < comments.Length) ShowCommnet(3);
     }
 
-    public void ShowCommnet()
+    public void ShowCommnet(int n)
     {
         sb.Clear();
         animator.SetTrigger("DownTrigger");
 
-        sb.Append($"{comments[currentComment++]}");
+        sb.Append($"{comments[n]}");
         text.SetText(sb);
     }
 

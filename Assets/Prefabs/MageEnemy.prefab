@@ -443,7 +443,7 @@ MonoBehaviour:
   offset: 0
   curState: 0
   returnPoll: {fileID: 0}
-  enemyType: 0
+  enemyType: 2
 --- !u!1 &5920211515705271530
 GameObject:
   m_ObjectHideFlags: 0

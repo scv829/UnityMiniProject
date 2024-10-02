@@ -6,11 +6,18 @@ public class AttackArea : MonoBehaviour
 {
     [Header("Attack")]
     [SerializeField] Transform target;
+    [SerializeField] SphereCollider col;
 
     [Header("Target_LayerMask")]
     [SerializeField] LayerMask targetLayerMask;
 
     public Transform Target { get { return target; } }
+    public float Redius { get {return col.radius; } set { col.radius = value; } }
+
+    private void Awake()
+    {
+        col = GetComponent<SphereCollider>();
+    }
 
     public void ResetTarget()
     {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -40,8 +41,10 @@ public class Tower : MonoBehaviour, IHit, Interaction, IUpgrade
     [SerializeField] int[] upgradeCost;
     [SerializeField] int currentLevel;
     [SerializeField] int useCoinCount;
+    [TextArea(3, 5)] 
+    [SerializeField] string info;
 
-
+    private StringBuilder sb;
     private Coroutine upgradeCoroutine;
 
     private void Awake()
@@ -56,6 +59,8 @@ public class Tower : MonoBehaviour, IHit, Interaction, IUpgrade
         navMeshObstacle = GetComponent<NavMeshObstacle>();
         boxCollider = GetComponent<BoxCollider>();
         currentMesh = GetComponent<MeshFilter>();
+
+        sb = new StringBuilder();
     }
 
     private void Start()
@@ -99,8 +104,51 @@ public class Tower : MonoBehaviour, IHit, Interaction, IUpgrade
     public void GetMission()
     {
         // UI 설정
-        if (currentLevel < upgradeCost.Length) Debug.Log($"UpgradeCost : {useCoinCount} / {upgradeCost[currentLevel]} ");
-        else Debug.Log("MaxLevel");
+        if (currentLevel < upgradeCost.Length)
+        {
+            sb.Clear();
+            // 건물에 대한 설명
+            sb.AppendLine(info);
+
+            if(currentLevel == 0)
+            {
+                sb.AppendLine("\n건설 비용");
+            }
+            else
+            {
+                // 목표 레벨 : 현재 레밸 -> 목표 레벨
+                sb.AppendLine($"{currentLevel} -> {currentLevel + 1}");
+                // 공격력
+                sb.AppendLine($"{attackDamage} -> {attackDamage * 2}");
+                // 공격속도
+                sb.AppendLine($"{attackSpeed} -> {attackSpeed * 2}");
+                // 공격 범위
+                sb.AppendLine($"{attackArea.Redius} -> {attackArea.Redius * 2}");
+                sb.AppendLine("\n업그레이드 비용 비용");
+            }
+
+            // 코스트
+            sb.AppendLine($"Cost : {useCoinCount} / {upgradeCost[currentLevel]} ");
+        }
+        else
+        {
+            sb.Clear();
+            // 건물에 대한 설명
+            sb.AppendLine(info);
+            // 목표 레벨 : 현재 레밸 -> 목표 레벨
+            sb.AppendLine($"{currentLevel} -> MaxLevel");
+            // 공격력
+            sb.AppendLine($"{attackDamage} -> MaxLevel");
+            // 공격속도
+            sb.AppendLine($"{attackSpeed} -> MaxLevel");
+            // 공격 범위
+            sb.AppendLine($"{attackArea.Redius} -> MaxLevel");
+
+            // 코스트
+            Debug.Log($"UpgradeCost : MaxLevel ");
+        }
+
+        GameManager.instance.SetUpgradeMission(sb, gameObject.name);
     }
 
     // 실제 업그레이드
@@ -117,12 +165,12 @@ public class Tower : MonoBehaviour, IHit, Interaction, IUpgrade
         {
             attackDamage *= 2;
             attackSpeed *= 2;
-            attackArea.GetComponent<SphereCollider>().radius *= 2;
+            attackArea.Redius *= 2;
             hp = maxHp * 2;
         }
 
         currentMesh.mesh = meshes[currentLevel++];
-
+        if (GameManager.instance.IsShowUpgradeUI) GetMission();
     }
 
     IEnumerator UseCoinToUpgrade()
@@ -136,10 +184,10 @@ public class Tower : MonoBehaviour, IHit, Interaction, IUpgrade
             {
                 Upgrade();
                 useCoinCount = 0;
-                Debug.Log("do");
                 break;
             }
-            Debug.Log($"useCoin : {useCoinCount}");
+            
+            GetMission();
             yield return new WaitForSeconds(0.5f);
         }
     }

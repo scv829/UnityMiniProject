@@ -602,7 +602,7 @@ MonoBehaviour:
   offset: 0
   curState: 0
   returnPoll: {fileID: 0}
-  enemyType: 0
+  enemyType: 1
 --- !u!1 &1688076015196956771
 GameObject:
   m_ObjectHideFlags: 0

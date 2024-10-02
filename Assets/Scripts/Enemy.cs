@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour, IHit
     [SerializeField] Transform baseTarget;
     [SerializeField] float attackSpeed;
     [SerializeField] float attackDamage;
+    [SerializeField] GameObject attackPrefab;
 
     [Header("Die")]
     [SerializeField] GameObject dieEffect;
@@ -175,7 +176,18 @@ public class Enemy : MonoBehaviour, IHit
                     currentAttackCoolTime = 0f;
                     // 공격 개시
                     enemy.animator.SetTrigger("AttackTrigger");
-                    enemy.attackArea.Target.GetComponent<IHit>().TakeDamage(enemy.attackDamage);
+
+                    // Maze는 원거리 몬스터
+                    if(enemy.enemyType.Equals(EnemyType.Maze))
+                    {
+                        GameObject instance = Instantiate(enemy.attackPrefab, enemy.transform.position, Quaternion.identity);
+                        instance.GetComponent<AttackObejct>().Setting(enemy.attackArea.Target, enemy.attackDamage);
+                    }
+                    // Orc, Skeleton은 근거리 몬스터
+                    else
+                    {
+                        enemy.attackArea.Target.GetComponent<IHit>().TakeDamage(enemy.attackDamage);
+                    }
                 }
                 
                 currentAttackCoolTime += Time.deltaTime;

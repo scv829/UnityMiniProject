@@ -11,6 +11,12 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    [Header("Nexus")]
+    [SerializeField] bool isBuildNexus;     // 본진을 지었는지 확인
+    [SerializeField] GameObject tutorial;
+
+    public bool BuildNexus { get { return isBuildNexus; } set { isBuildNexus = value; tutorial.SetActive(false);  } }
+
     // 웨이브에 대한 정보
     [Header("Wave")]
     [SerializeField] UnityEvent startWave;  // 웨이브 시작이벤트
@@ -34,9 +40,23 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI coinCountText;
     [SerializeField] int coinCount;
 
+    [Space]
+    [Header("UI")]
+    [Header("Upgrade")]
+    [SerializeField] GameObject UpgradeUI;
+    [SerializeField] TextMeshProUGUI buildingName;
+    [SerializeField] TextMeshProUGUI buildingUpgradeText;
+    [SerializeField] bool isShowUpgradeUI;
+    [SerializeField] Transform upgradeTarget;
+    [Header("Wave")]
+    [SerializeField] Image WaveUI;
+    [SerializeField] TextMeshProUGUI waveText;
+    [Header("Result")]
+    [SerializeField] GameObject gameResultUI;
+    [SerializeField] TextMeshProUGUI gameResultText;
+
     private StringBuilder textStringBuilder;
     private Coroutine holdingCoroutine;
-
     
 
     public void GetWave(ref int[] wave)
@@ -52,7 +72,8 @@ public class GameManager : MonoBehaviour
     public bool IsEnough { get { return (coinCount > 0); } }
     public void IncreaseCoin() => coinCount++;
     public void DecreaseCoin() => coinCount--;
-
+    public bool IsShowUpgradeUI { get { return isShowUpgradeUI; } set { isShowUpgradeUI = value; UpgradeUI.SetActive(isShowUpgradeUI); } }
+    public Transform UpgradeTarget { set { upgradeTarget = value; } }
 
     private void Awake()
     {
@@ -79,6 +100,7 @@ public class GameManager : MonoBehaviour
         totalWave = waveArray.GetLength(0);
         currentWave = 0;
         isStartWave = false;
+        isBuildNexus = false;
     }
 
     private void Update()
@@ -87,7 +109,7 @@ public class GameManager : MonoBehaviour
 
         if (currentWave >= totalWave)
         {
-           // 게임 승리 로직
+            GameClear();
         }
     }
 
@@ -103,7 +125,7 @@ public class GameManager : MonoBehaviour
     public void HoldingSpace()
     {
         // 스페이스 바 홀드하면 웨이브 시작
-        if (Input.GetKeyDown(KeyCode.Space) && holdingCoroutine == null && !isStartWave)
+        if (Input.GetKeyDown(KeyCode.Space) && holdingCoroutine == null && !isStartWave && isBuildNexus)
         {
             gaugeSlider.gameObject.SetActive(true);
             chargeTimeText.gameObject.SetActive(true);
@@ -145,6 +167,7 @@ public class GameManager : MonoBehaviour
 
         startWave?.Invoke();
         isStartWave = true;
+        SetText();
     }
 
     IEnumerator DecreaseChargeGauge()
@@ -161,6 +184,56 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
+    }
+
+    public void SetUpgradeMission(StringBuilder sb, string name)
+    {
+        UpgradeUI.transform.position = Camera.main.WorldToScreenPoint(upgradeTarget.position + new Vector3(0, -30f, 0));
+        textStringBuilder.Clear();
+        textStringBuilder.Append(name);
+        buildingName.SetText(textStringBuilder);
+        buildingUpgradeText.SetText(sb);
+    }
+
+    public void SetText()
+    {
+        textStringBuilder.Clear();
+        textStringBuilder.Append($"{currentWave + 1} / {totalWave}");
+
+        waveText.SetText(textStringBuilder);
+
+        StartCoroutine(FadeInFadeOut());
+    }
+
+    IEnumerator FadeInFadeOut()
+    {
+        WaveUI.gameObject.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        WaveUI.gameObject.SetActive(false);
+    }
+
+    private void GameClear()
+    {
+        textStringBuilder.Clear();
+        textStringBuilder.Append("Victory");
+
+        gameResultUI.gameObject.SetActive(true);
+        gameResultText.SetText(textStringBuilder);
+    }
+
+    public void GameOver()
+    {
+        textStringBuilder.Clear();
+        textStringBuilder.Append("Defeat");
+        gameResultUI.gameObject.SetActive(true);
+
+        gameResultText.SetText(textStringBuilder);
+    }
+
+    public void ReturnMenu()
+    {
+        // Scene 매니저로 씬 전환하는 부분
+        Debug.Log("씬 전환!");
     }
 
 }

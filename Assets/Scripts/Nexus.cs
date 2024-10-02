@@ -102,9 +102,12 @@ public class Nexus : MonoBehaviour, IHit, Interaction, IUpgrade
 
     public void InteractAction()
     {
+        
+
         if (Input.GetKeyDown(KeyCode.Space) && upgradeCoroutine == null && currentLevel < upgradeCost.Length)
         {
-            upgradeCoroutine = StartCoroutine(UseCoinToUpgrade());
+            if(currentLevel == 0) Upgrade();
+            else upgradeCoroutine = StartCoroutine(UseCoinToUpgrade());
         }
         else if (Input.GetKeyUp(KeyCode.Space) && upgradeCoroutine != null)
         {

@@ -3731,10 +3731,10 @@ Animator:
   m_GameObject: {fileID: 1537559948753513900}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: c9a34c70f1c0d00409f41fcfbb2a6871, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fc1e83b1279b2cf4baf44be14f05e15a, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -3795,7 +3795,7 @@ MonoBehaviour:
   currentAttackCoolTime: 0
   targetPosition: {x: 0, y: 0, z: 0}
   muzzlePoint: {fileID: 383283593752058233}
-  dieEffect: {fileID: 0}
+  dieEffect: {fileID: 4825124900785505853, guid: 47d596a594b414e4abd154419c639547, type: 3}
   interactEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -4683,6 +4683,14 @@ PrefabInstance:
     - target: {fileID: 3758731602742363767, guid: 5df743d0df794ef45a96bb3c7e0a2de0, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3758731603007892677, guid: 5df743d0df794ef45a96bb3c7e0a2de0, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3758731603007892677, guid: 5df743d0df794ef45a96bb3c7e0a2de0, type: 3}
+      propertyPath: m_Color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3758731603007892679, guid: 5df743d0df794ef45a96bb3c7e0a2de0, type: 3}
       propertyPath: m_Layer

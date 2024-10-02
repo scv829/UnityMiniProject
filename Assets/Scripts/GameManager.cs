@@ -34,9 +34,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI coinCountText;
     [SerializeField] int coinCount;
 
+    [Space]
+    [Header("UI")]
+    [SerializeField] GameObject UpgradeUI;
+    [SerializeField] TextMeshProUGUI buildingName;
+    [SerializeField] TextMeshProUGUI buildingUpgradeText;
+    [SerializeField] bool isShowUpgradeUI;
+    [SerializeField] Transform upgradeTarget;
+
     private StringBuilder textStringBuilder;
     private Coroutine holdingCoroutine;
-
     
 
     public void GetWave(ref int[] wave)
@@ -52,7 +59,8 @@ public class GameManager : MonoBehaviour
     public bool IsEnough { get { return (coinCount > 0); } }
     public void IncreaseCoin() => coinCount++;
     public void DecreaseCoin() => coinCount--;
-
+    public bool IsShowUpgradeUI { get { return isShowUpgradeUI; } set { isShowUpgradeUI = value; UpgradeUI.SetActive(isShowUpgradeUI); } }
+    public Transform UpgradeTarget { set { upgradeTarget = value; } }
 
     private void Awake()
     {
@@ -161,6 +169,15 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
+    }
+
+    public void SetUpgradeMission(StringBuilder sb, string name)
+    {
+        UpgradeUI.transform.position = Camera.main.WorldToScreenPoint(upgradeTarget.position + new Vector3(0, -30f, 0));
+        textStringBuilder.Clear();
+        textStringBuilder.Append(name);
+        buildingName.SetText(textStringBuilder);
+        buildingUpgradeText.SetText(sb);
     }
 
 }

@@ -30,6 +30,11 @@ public class InteractionArea : MonoBehaviour
         // 상호작용 가능한 오브젝트(유저) 이면서 웨이브(전투) 시작 전일때
         if(other.gameObject.CompareTag("Player") && !GameManager.instance.IsStartWave)
         {
+            if (!GameManager.instance.IsShowUpgradeUI) GameManager.instance.IsShowUpgradeUI = true;
+
+            // UI 위치를 해당 건물 위치로 이동
+            GameManager.instance.UpgradeTarget = transform;
+
             // GameManager.instance 에게 UI 보이기
             upgrade?.GetMission();
 
@@ -51,8 +56,9 @@ public class InteractionArea : MonoBehaviour
         // 상호작용 가능한 오브젝트(유저) 이면서 웨이브(전투) 시작 전일때
         if (other.gameObject.CompareTag("Player") && !GameManager.instance.IsStartWave)
         {
+
             // GameManager.instance 에게 UI 안보이기
-            Debug.Log("Close");
+            if (GameManager.instance.IsShowUpgradeUI) GameManager.instance.IsShowUpgradeUI = false;
 
             // 이 오브젝트의 상호작용 함수 제거
             other.gameObject.GetComponent<PlayerCointroller>().interactEvent?.RemoveAllListeners();

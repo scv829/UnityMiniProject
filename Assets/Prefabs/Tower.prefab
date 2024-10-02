@@ -141,7 +141,6 @@ MonoBehaviour:
   navMeshObstacle: {fileID: 0}
   boxCollider: {fileID: 0}
   attackArea: {fileID: 9168359911278947476}
-  attackRange: 0
   attackPrefab: {fileID: 814637833033622479, guid: 1fbfb032e44612543880279388984f41, type: 3}
   attackDamage: 1
   attackSpeed: 1
@@ -549,7 +548,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

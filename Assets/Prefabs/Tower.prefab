@@ -153,6 +153,7 @@ MonoBehaviour:
   upgradeCost: 030000000500000008000000
   currentLevel: 0
   useCoinCount: 0
+  info: "\n\uD65C\uB85C \uACF5\uACA9\uC744 \uD558\uB294 \uD0C0\uC6CC\uC785\uB2C8\uB2E4."
 --- !u!1 &3155205125916095849
 GameObject:
   m_ObjectHideFlags: 0
@@ -881,6 +882,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  col: {fileID: 9168359911278947466}
   targetLayerMask:
     serializedVersion: 2
     m_Bits: 8

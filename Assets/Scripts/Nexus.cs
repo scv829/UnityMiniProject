@@ -177,6 +177,7 @@ public class Nexus : MonoBehaviour, IHit, Interaction, IUpgrade
             boxCollider.enabled = true;
             render.enabled = true;
             navMeshObstacle.enabled = true;
+            GameManager.instance.BuildNexus = true;
         }
         else if(currentLevel == 1)
         {

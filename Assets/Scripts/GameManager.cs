@@ -11,6 +11,12 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    [Header("Nexus")]
+    [SerializeField] bool isBuildNexus;     // 본진을 지었는지 확인
+    [SerializeField] GameObject tutorial;
+
+    public bool BuildNexus { get { return isBuildNexus; } set { isBuildNexus = value; tutorial.SetActive(false);  } }
+
     // 웨이브에 대한 정보
     [Header("Wave")]
     [SerializeField] UnityEvent startWave;  // 웨이브 시작이벤트
@@ -94,6 +100,7 @@ public class GameManager : MonoBehaviour
         totalWave = waveArray.GetLength(0);
         currentWave = 0;
         isStartWave = false;
+        isBuildNexus = false;
     }
 
     private void Update()
@@ -118,7 +125,7 @@ public class GameManager : MonoBehaviour
     public void HoldingSpace()
     {
         // 스페이스 바 홀드하면 웨이브 시작
-        if (Input.GetKeyDown(KeyCode.Space) && holdingCoroutine == null && !isStartWave)
+        if (Input.GetKeyDown(KeyCode.Space) && holdingCoroutine == null && !isStartWave && isBuildNexus)
         {
             gaugeSlider.gameObject.SetActive(true);
             chargeTimeText.gameObject.SetActive(true);

@@ -146,7 +146,7 @@ public class Tower : MonoBehaviour, IHit, Interaction, IUpgrade
 
     public void InteractAction()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && upgradeCoroutine == null)
+        if (Input.GetKeyDown(KeyCode.Space) && upgradeCoroutine == null && currentLevel < upgradeCost.Length)
         {
             upgradeCoroutine = StartCoroutine(UseCoinToUpgrade());
         }

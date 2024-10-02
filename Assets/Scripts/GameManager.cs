@@ -198,7 +198,7 @@ public class GameManager : MonoBehaviour
     public void SetText()
     {
         textStringBuilder.Clear();
-        textStringBuilder.Append($"{currentWave} / {totalWave}");
+        textStringBuilder.Append($"{currentWave + 1} / {totalWave}");
 
         waveText.SetText(textStringBuilder);
 

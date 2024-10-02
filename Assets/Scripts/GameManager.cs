@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI buildingUpgradeText;
     [SerializeField] bool isShowUpgradeUI;
     [SerializeField] Transform upgradeTarget;
+    [SerializeField] Image WaveUI;
+    [SerializeField] TextMeshProUGUI waveText;
+
 
     private StringBuilder textStringBuilder;
     private Coroutine holdingCoroutine;
@@ -95,7 +98,7 @@ public class GameManager : MonoBehaviour
 
         if (currentWave >= totalWave)
         {
-           // 게임 승리 로직
+           
         }
     }
 
@@ -153,6 +156,7 @@ public class GameManager : MonoBehaviour
 
         startWave?.Invoke();
         isStartWave = true;
+        SetText();
     }
 
     IEnumerator DecreaseChargeGauge()
@@ -178,6 +182,23 @@ public class GameManager : MonoBehaviour
         textStringBuilder.Append(name);
         buildingName.SetText(textStringBuilder);
         buildingUpgradeText.SetText(sb);
+    }
+
+    public void SetText()
+    {
+        textStringBuilder.Clear();
+        textStringBuilder.Append($"{currentWave} / {totalWave}");
+
+        waveText.SetText(textStringBuilder);
+
+        StartCoroutine(FadeInFadeOut());
+    }
+
+    IEnumerator FadeInFadeOut()
+    {
+        WaveUI.gameObject.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        WaveUI.gameObject.SetActive(false);
     }
 
 }

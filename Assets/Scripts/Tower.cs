@@ -170,7 +170,7 @@ public class Tower : MonoBehaviour, IHit, Interaction, IUpgrade
         }
 
         currentMesh.mesh = meshes[currentLevel++];
-
+        if (GameManager.instance.IsShowUpgradeUI) GetMission();
     }
 
     IEnumerator UseCoinToUpgrade()

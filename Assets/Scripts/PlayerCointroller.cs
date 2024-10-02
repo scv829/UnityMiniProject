@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using static UnityEngine.EventSystems.EventTrigger;
 
@@ -35,6 +36,9 @@ public class PlayerCointroller : MonoBehaviour, IHit
     [Header("Die")]
     [SerializeField] GameObject dieEffect;
 
+    [Header("Interact")]
+    [SerializeField] public UnityEvent interactEvent;
+
     private Coroutine attackCoroutine;
 
     public void TakeDamage(int damage)
@@ -63,8 +67,12 @@ public class PlayerCointroller : MonoBehaviour, IHit
         if (attackSpeed > 1) animator.SetFloat("AttackSpeed", attackSpeed);
         else animator.SetFloat("AttackSpeed", 1);
 
-
+        // 공격 조준 스코프 비활성화
         targetScope.gameObject.SetActive(false);
+
+        // 초기 상호작용은 바로 -> Nexus 지으면 그때 연결할건데 임시
+
+        interactEvent.AddListener(GameManager.instance.HoldingSpace);
     }
 
     private void Update()
@@ -72,6 +80,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
         Move();
         Rotate();
         Attack();
+        Interact();
         if (isDead) 
         { 
             Debug.Log("PlayerDead"); 
@@ -122,6 +131,12 @@ public class PlayerCointroller : MonoBehaviour, IHit
         
         if(attackArea.Target != null)
             targetScope.transform.position = Camera.main.WorldToScreenPoint(attackArea.Target.position);
+    }
+
+
+    private void Interact()
+    {
+        interactEvent?.Invoke();
     }
 
     private IEnumerator attacking()

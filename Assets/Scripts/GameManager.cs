@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] int enemiesCount;      // 웨이브에 등장하는 몬스터 종류
     [SerializeField] int[,] waveArray;      // 2차원 배열 [wave 스테이지][적종류] -> 적이 나와야 하는 수
 
+    public bool IsStartWave { get { return isStartWave; } }
+
     [Space]
     [Header("Charge")]
     [SerializeField] Slider gaugeSlider;
@@ -35,6 +37,8 @@ public class GameManager : MonoBehaviour
     private StringBuilder textStringBuilder;
     private Coroutine holdingCoroutine;
 
+    
+
     public void GetWave(ref int[] wave)
     {
         for (int i = 0; i < waveArray.GetLength(1); i++)
@@ -45,8 +49,10 @@ public class GameManager : MonoBehaviour
 
     public void WaveClear() { currentWave++; endWave?.Invoke(); isStartWave = false; }
 
-    
+    public bool IsEnough { get { return (coinCount > 0); } }
     public void IncreaseCoin() => coinCount++;
+    public void DecreaseCoin() => coinCount--;
+
 
     private void Awake()
     {
@@ -77,9 +83,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        HoldingSpace();     // 스페이스바 홀딩 -> 게임 시작
         CoinCounting();     // 코인 흭득시 -> UI 변경
-
 
         if (currentWave >= totalWave)
         {
@@ -95,7 +99,8 @@ public class GameManager : MonoBehaviour
         coinCountText.SetText(textStringBuilder);
     }
 
-    private void HoldingSpace()
+    // 스페이스바 홀딩 -> 게임 시작
+    public void HoldingSpace()
     {
         // 스페이스 바 홀드하면 웨이브 시작
         if (Input.GetKeyDown(KeyCode.Space) && holdingCoroutine == null && !isStartWave)

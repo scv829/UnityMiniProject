@@ -3796,6 +3796,9 @@ MonoBehaviour:
   targetPosition: {x: 0, y: 0, z: 0}
   muzzlePoint: {fileID: 383283593752058233}
   dieEffect: {fileID: 0}
+  interactEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!136 &6522679910223720490
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4440,7 +4443,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9168359911386760496, guid: 1db1991d268d97143bb4c120d6a92068, type: 3}
       propertyPath: m_Name
-      value: Attack
+      value: Area
       objectReference: {fileID: 0}
     - target: {fileID: 9168359911386760496, guid: 1db1991d268d97143bb4c120d6a92068, type: 3}
       propertyPath: m_Layer

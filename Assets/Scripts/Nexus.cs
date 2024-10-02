@@ -311,7 +311,7 @@ public class Nexus : MonoBehaviour, IHit, Interaction, IUpgrade
             Destroy(obj, 2f);
 
             // 게임 오버 로직
-            Time.timeScale = 0f;
+            GameManager.instance.GameOver();
         }
     }
 }

@@ -36,14 +36,18 @@ public class GameManager : MonoBehaviour
 
     [Space]
     [Header("UI")]
+    [Header("Upgrade")]
     [SerializeField] GameObject UpgradeUI;
     [SerializeField] TextMeshProUGUI buildingName;
     [SerializeField] TextMeshProUGUI buildingUpgradeText;
     [SerializeField] bool isShowUpgradeUI;
     [SerializeField] Transform upgradeTarget;
+    [Header("Wave")]
     [SerializeField] Image WaveUI;
     [SerializeField] TextMeshProUGUI waveText;
-
+    [Header("Result")]
+    [SerializeField] GameObject gameResultUI;
+    [SerializeField] TextMeshProUGUI gameResultText;
 
     private StringBuilder textStringBuilder;
     private Coroutine holdingCoroutine;
@@ -98,7 +102,7 @@ public class GameManager : MonoBehaviour
 
         if (currentWave >= totalWave)
         {
-           
+            GameClear();
         }
     }
 
@@ -199,6 +203,30 @@ public class GameManager : MonoBehaviour
         WaveUI.gameObject.SetActive(true);
         yield return new WaitForSeconds(3f);
         WaveUI.gameObject.SetActive(false);
+    }
+
+    private void GameClear()
+    {
+        textStringBuilder.Clear();
+        textStringBuilder.Append("Victory");
+
+        gameResultUI.gameObject.SetActive(true);
+        gameResultText.SetText(textStringBuilder);
+    }
+
+    public void GameOver()
+    {
+        textStringBuilder.Clear();
+        textStringBuilder.Append("Defeat");
+        gameResultUI.gameObject.SetActive(true);
+
+        gameResultText.SetText(textStringBuilder);
+    }
+
+    public void ReturnMenu()
+    {
+        // Scene 매니저로 씬 전환하는 부분
+        Debug.Log("씬 전환!");
     }
 
 }

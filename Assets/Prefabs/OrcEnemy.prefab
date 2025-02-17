@@ -587,12 +587,14 @@ MonoBehaviour:
   searchArea: {fileID: 6977822574050013137}
   agent: {fileID: 0}
   hp: 20
+  maxHp: 20
   animator: {fileID: 0}
   hitPoint: {fileID: 1688014384501135215}
   attackArea: {fileID: 6977822574924483762}
   baseTarget: {fileID: 0}
-  attackSpeed: 2
+  attackSpeed: 1
   attackDamage: 2
+  attackPrefab: {fileID: 0}
   dieEffect: {fileID: 4825124900785505853, guid: 47d596a594b414e4abd154419c639547, type: 3}
   dieEvent:
     m_PersistentCalls:

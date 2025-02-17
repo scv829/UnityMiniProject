@@ -428,12 +428,15 @@ MonoBehaviour:
   searchArea: {fileID: 4362721696398073277}
   agent: {fileID: 0}
   hp: 5
+  maxHp: 5
   animator: {fileID: 0}
   hitPoint: {fileID: 5920304258105999074}
+  attackType: 1
   attackArea: {fileID: 4362721697817886430}
   baseTarget: {fileID: 0}
   attackSpeed: 1
   attackDamage: 1
+  attackPrefab: {fileID: 7931242100935656658, guid: b0d6d243aa159cb4c887d4b26de2dfc3, type: 3}
   dieEffect: {fileID: 4825124900785505853, guid: 47d596a594b414e4abd154419c639547, type: 3}
   dieEvent:
     m_PersistentCalls:
@@ -2436,8 +2439,24 @@ PrefabInstance:
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 9168359911278947467, guid: 1db1991d268d97143bb4c120d6a92068, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9168359911278947467, guid: 1db1991d268d97143bb4c120d6a92068, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9168359911278947467, guid: 1db1991d268d97143bb4c120d6a92068, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9168359911278947467, guid: 1db1991d268d97143bb4c120d6a92068, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9168359911278947467, guid: 1db1991d268d97143bb4c120d6a92068, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9168359911278947476, guid: 1db1991d268d97143bb4c120d6a92068, type: 3}
       propertyPath: targetLayerMask.m_Bits

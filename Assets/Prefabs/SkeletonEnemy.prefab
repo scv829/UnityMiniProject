@@ -2002,12 +2002,14 @@ MonoBehaviour:
   searchArea: {fileID: 1090186676527652179}
   agent: {fileID: 0}
   hp: 10
+  maxHp: 10
   animator: {fileID: 0}
   hitPoint: {fileID: 4501450669676502024}
   attackArea: {fileID: 1090186677221850672}
   baseTarget: {fileID: 0}
   attackSpeed: 1
   attackDamage: 1
+  attackPrefab: {fileID: 0}
   dieEffect: {fileID: 4825124900785505853, guid: 47d596a594b414e4abd154419c639547, type: 3}
   dieEvent:
     m_PersistentCalls:

@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
 
 
 public class Enemy : MonoBehaviour, IHit
@@ -11,10 +13,12 @@ public class Enemy : MonoBehaviour, IHit
     [SerializeField] SearchArea searchArea;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] float hp;
+    [SerializeField] float maxHp;
     [SerializeField] Animator animator;
     [SerializeField] GameObject hitPoint;
 
     [Header("Attack")]
+    [SerializeField] EnemyAttackType attackType;
     [SerializeField] AttackArea attackArea;
     [SerializeField] Transform baseTarget;
     [SerializeField] float attackSpeed;
@@ -39,7 +43,9 @@ public class Enemy : MonoBehaviour, IHit
     [Header("Object_Pool")]
     [SerializeField] EnemyPool returnPoll;
     [SerializeField] EnemyType enemyType;
-    public enum EnemyType { Skeleton, Orc, Maze, Size }
+    public enum EnemyType { Skeleton, Orc, Mage, Size }
+
+    public enum EnemyAttackType { Melee, Ranged }
 
     public int Type { set { enemyType = (EnemyType)value; } }
     public EnemyPool ReturnPoll { set { returnPoll = value; } }
@@ -54,6 +60,12 @@ public class Enemy : MonoBehaviour, IHit
         states[(int)State.Die] = new DieState(this);
     }
 
+    private void Start()
+    {
+        dieEvent.AddListener(attackArea.ResetTarget);
+        dieEvent.AddListener(searchArea.ResetTarget);
+    }
+
     private void OnEnable()
     {
         hpBar.maxValue = hp;
@@ -62,6 +74,11 @@ public class Enemy : MonoBehaviour, IHit
         baseTarget = GameObject.FindWithTag("Nexus").transform;
         curState = State.Trace;
         states[(int)curState].Enter();
+    }
+
+    private void OnDisable()
+    {
+        hp = maxHp;
     }
 
     private void Update()
@@ -134,7 +151,7 @@ public class Enemy : MonoBehaviour, IHit
             attackCoolTime = 1f / enemy.attackSpeed;
             
             if (enemy.attackSpeed > 1) enemy.animator.SetFloat("AttackSpeed", enemy.attackSpeed);
-            else enemy.animator.SetFloat("AttackSpeed", 1);
+            else enemy.animator.SetFloat("AttackSpeed", 1f);
 
             // 처음 공격할 때는 바로 공격
             currentAttackCoolTime = attackCoolTime;
@@ -177,13 +194,13 @@ public class Enemy : MonoBehaviour, IHit
                     // 공격 개시
                     enemy.animator.SetTrigger("AttackTrigger");
 
-                    // Maze는 원거리 몬스터
-                    if(enemy.enemyType.Equals(EnemyType.Maze))
+                    // 원거리 몬스터
+                    if(enemy.attackType.Equals(EnemyAttackType.Ranged))
                     {
                         GameObject instance = Instantiate(enemy.attackPrefab, enemy.transform.position, Quaternion.identity);
                         instance.GetComponent<AttackObejct>().Setting(enemy.attackArea.Target, enemy.attackDamage);
                     }
-                    // Orc, Skeleton은 근거리 몬스터
+                    // 근거리 몬스터
                     else
                     {
                         enemy.attackArea.Target.GetComponent<IHit>().TakeDamage(enemy.attackDamage);
@@ -215,7 +232,7 @@ public class Enemy : MonoBehaviour, IHit
 
             // 사망시 아이템 드랍
             GameObject coin = Instantiate(enemy.dropItem);
-            coin.transform.position = enemy.transform.position;
+            coin.transform.position = enemy.transform.position + Vector3.up;
 
             // 풀에 회수
             enemy.returnPoll.ReturnPool((int)enemy.enemyType, enemy);
@@ -224,5 +241,4 @@ public class Enemy : MonoBehaviour, IHit
             enemy.dieEvent.RemoveAllListeners();
         }
     }
-
 }

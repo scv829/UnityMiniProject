@@ -12,6 +12,10 @@ public class SearchArea : MonoBehaviour
 
     public Transform Target { get { return target; } }
 
+    public void ResetTarget()
+    {
+        target = null;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -31,7 +35,6 @@ public class SearchArea : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-
         if (target != null && other.gameObject.Equals(target.gameObject))
         {
             target = null;

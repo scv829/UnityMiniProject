@@ -26,20 +26,19 @@ public class AttackArea : MonoBehaviour
 
     private void SetEvent()
     {
-        if (target.gameObject.GetComponent<Enemy>() != null)
+        if (target != null)
         {
-            target.gameObject.GetComponent<Enemy>().dieEvent.AddListener(ResetTarget);
+            target.gameObject.GetComponent<Enemy>()?.dieEvent.AddListener(ResetTarget);
         }
     }
 
     private void ResetEvent()
     {
-        if (target.gameObject.GetComponent<Enemy>() != null)
+        if (target != null)
         {
-            target.gameObject.GetComponent<Enemy>().dieEvent.RemoveListener(ResetTarget);
+            target.gameObject.GetComponent<Enemy>()?.dieEvent.RemoveListener(ResetTarget);
         }
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if ( ((targetLayerMask & (1 << other.gameObject.layer)) != 0) && target == null)

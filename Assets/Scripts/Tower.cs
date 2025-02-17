@@ -117,13 +117,13 @@ public class Tower : MonoBehaviour, IHit, Interaction, IUpgrade
             else
             {
                 // 목표 레벨 : 현재 레밸 -> 목표 레벨
-                sb.AppendLine($"{currentLevel} -> {currentLevel + 1}");
+                sb.AppendLine($"\n   레벨     {currentLevel} -> {currentLevel + 1}");
                 // 공격력
-                sb.AppendLine($"{attackDamage} -> {attackDamage * 2}");
+                sb.AppendLine($"공격 데미지 {attackDamage} -> {attackDamage * 2}");
                 // 공격속도
-                sb.AppendLine($"{attackSpeed} -> {attackSpeed * 2}");
+                sb.AppendLine($"공격 속도   {attackSpeed} -> {attackSpeed * 2}");
                 // 공격 범위
-                sb.AppendLine($"{attackArea.Redius} -> {attackArea.Redius * 2}");
+                sb.AppendLine($"공격 범위   {attackArea.Redius} -> {attackArea.Redius * 2}");
                 sb.AppendLine("\n업그레이드 비용 비용");
             }
 
@@ -136,16 +136,13 @@ public class Tower : MonoBehaviour, IHit, Interaction, IUpgrade
             // 건물에 대한 설명
             sb.AppendLine(info);
             // 목표 레벨 : 현재 레밸 -> 목표 레벨
-            sb.AppendLine($"{currentLevel} -> MaxLevel");
+            sb.AppendLine($"\n   레벨     MaxLevel");
             // 공격력
-            sb.AppendLine($"{attackDamage} -> MaxLevel");
+            sb.AppendLine($"공격 데미지 MaxLevel");
             // 공격속도
-            sb.AppendLine($"{attackSpeed} -> MaxLevel");
+            sb.AppendLine($"공격 속도   MaxLevel");
             // 공격 범위
-            sb.AppendLine($"{attackArea.Redius} -> MaxLevel");
-
-            // 코스트
-            Debug.Log($"UpgradeCost : MaxLevel ");
+            sb.AppendLine($"공격 범위   MaxLevel");
         }
 
         GameManager.instance.SetUpgradeMission(sb, gameObject.name);

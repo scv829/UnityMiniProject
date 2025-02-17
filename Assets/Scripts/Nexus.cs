@@ -102,8 +102,6 @@ public class Nexus : MonoBehaviour, IHit, Interaction, IUpgrade
 
     public void InteractAction()
     {
-        
-
         if (Input.GetKeyDown(KeyCode.Space) && upgradeCoroutine == null && currentLevel < upgradeCost.Length)
         {
             if(currentLevel == 0) Upgrade();
@@ -132,19 +130,19 @@ public class Nexus : MonoBehaviour, IHit, Interaction, IUpgrade
             else if(currentLevel == 1)
             {
                 // 목표 레벨 : 현재 레밸 -> 목표 레벨
-                sb.AppendLine($"{currentLevel} -> {currentLevel + 1}");
+                sb.AppendLine($"\n   레벨     {currentLevel} -> {currentLevel + 1}");
                 sb.AppendLine($"\n\n공격 기능 추가");
             }
             else
             {
                 // 목표 레벨 : 현재 레밸 -> 목표 레벨
-                sb.AppendLine($"{currentLevel} -> {currentLevel + 1}");
+                sb.AppendLine($"\n   레벨     {currentLevel} -> {currentLevel + 1}");
                 // 공격력
-                sb.AppendLine($"{attackDamage} -> {attackDamage * 2}");
+                sb.AppendLine($"공격 데미지 {attackDamage} -> {attackDamage * 2}");
                 // 공격속도
-                sb.AppendLine($"{attackSpeed} -> {attackSpeed * 2}");
+                sb.AppendLine($"공격 속도   {attackSpeed} -> {attackSpeed * 2}");
                 // 공격 범위
-                sb.AppendLine($"{attackArea.Redius} -> {attackArea.Redius * 2}");
+                sb.AppendLine($"공격 범위   {attackArea.Redius} -> {attackArea.Redius * 2}");
                 sb.AppendLine("\n업그레이드 비용 비용");
             }
 
@@ -157,16 +155,13 @@ public class Nexus : MonoBehaviour, IHit, Interaction, IUpgrade
             // 건물에 대한 설명
             sb.AppendLine(info);
             // 목표 레벨 : 현재 레밸 -> 목표 레벨
-            sb.AppendLine($"{currentLevel} -> MaxLevel");
+            sb.AppendLine($"\n   레벨     MaxLevel");
             // 공격력
-            sb.AppendLine($"{attackDamage} -> MaxLevel");
+            sb.AppendLine($"공격 데미지 MaxLevel");
             // 공격속도
-            sb.AppendLine($"{attackSpeed} -> MaxLevel");
+            sb.AppendLine($"공격 속도   MaxLevel");
             // 공격 범위
-            sb.AppendLine($"{attackArea.Redius} -> MaxLevel");
-
-            // 코스트
-            Debug.Log($"UpgradeCost : MaxLevel ");
+            sb.AppendLine($"공격 범위   MaxLevel");
         }
 
         GameManager.instance.SetUpgradeMission(sb, gameObject.name);
@@ -205,26 +200,34 @@ public class Nexus : MonoBehaviour, IHit, Interaction, IUpgrade
 
     IEnumerator UseCoinToUpgrade()
     {
+        // 재화가 충분하면
         while (GameManager.instance.IsEnough)
         {
+            // 소지한 재화 - 1
             GameManager.instance.DecreaseCoin();
+            // 사용한 재화 + 1
             useCoinCount++;
 
+            // 사용한 재화가 업그레이드 재화 필요량과 같을 때
             if (useCoinCount == upgradeCost[currentLevel])
             {
+                // 업그레이드 진행
                 Upgrade();
                 useCoinCount = 0;
                 break;
             }
+            // 코루티 오류로 더 재화를 사용했다
             else if (useCoinCount > upgradeCost[currentLevel])
             {
+                // 그만큼 재화 원복 후
                 for(int i = 0; i < useCoinCount - upgradeCost[currentLevel]; i++) GameManager.instance.IncreaseCoin();
 
+                // 업그래이드 진행
                 Upgrade();
                 useCoinCount = 0;
                 break;
             }
-
+            // 업그레이드 UI 갱신
             GetMission();
             yield return new WaitForSeconds(0.5f);
         }

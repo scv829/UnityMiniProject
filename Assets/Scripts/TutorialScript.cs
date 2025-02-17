@@ -27,7 +27,11 @@ public class TutorialScript : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.BuildNexus && currentComment < comments.Length) ShowCommnet(3);
+        if (GameManager.instance.BuildNexus && currentComment < comments.Length)
+        {
+            ShowCommnet(3);
+            currentComment++;
+        }
     }
 
     public void ShowCommnet(int n)

@@ -9,11 +9,17 @@ public class CheckTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        script.ShowCommnet(n);
+        if(other.gameObject.CompareTag("Player"))
+        {
+            script.ShowCommnet(n);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Destroy(gameObject);
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

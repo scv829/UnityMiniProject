@@ -73,8 +73,8 @@ public class GameManager : MonoBehaviour
     public void WaveClear() { currentWave++; endWave?.Invoke(); isStartWave = false; }
 
     public bool IsEnough { get { return (coinCount > 0); } }
-    public void IncreaseCoin() => coinCount++;
-    public void DecreaseCoin() => coinCount--;
+    public void IncreaseCoin() { coinCount++; CoinUIUpdate(); }
+    public void DecreaseCoin() { coinCount--; CoinUIUpdate(); }
     public bool IsShowUpgradeUI { get { return isShowUpgradeUI; } set { isShowUpgradeUI = value; UpgradeUI.SetActive(isShowUpgradeUI); } }
     public Transform UpgradeTarget { set { upgradeTarget = value; } }
 
@@ -83,7 +83,6 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else Destroy(this);
 
@@ -94,9 +93,8 @@ public class GameManager : MonoBehaviour
         waveArray = new int[,]
             {
                 { 1, 0, 0 },
-                { 0, 2, 0 },
-                { 2, 1, 1 },
-                { 4, 2, 2 },
+            //{ 0, 2, 0 },
+            //{ 2, 0, 1 },
             };
 
         // 총 웨이브의 수 지정
@@ -104,19 +102,19 @@ public class GameManager : MonoBehaviour
         currentWave = 0;
         isStartWave = false;
         isBuildNexus = false;
+
+        Time.timeScale = 1f;
     }
 
     private void Update()
     {
-        CoinCounting();     // 코인 흭득시 -> UI 변경
-
         if (currentWave >= totalWave)
         {
             GameClear();
         }
     }
 
-    private void CoinCounting()
+    private void CoinUIUpdate()
     {
         textStringBuilder.Clear();
         textStringBuilder.Append($"{coinCount}");
@@ -128,26 +126,37 @@ public class GameManager : MonoBehaviour
     public void HoldingSpace()
     {
         // 스페이스 바 홀드하면 웨이브 시작
-        if (Input.GetKeyDown(KeyCode.Space) && holdingCoroutine == null && !isStartWave && isBuildNexus)
+        if (Input.GetKeyDown(KeyCode.Space) && !isStartWave && isBuildNexus)
         {
-            gaugeSlider.gameObject.SetActive(true);
-            chargeTimeText.gameObject.SetActive(true);
+            gaugeSlider.gameObject.SetActive(true);     // 게이지 UI 활성화
+            chargeTimeText.gameObject.SetActive(true);  // 시간 UI 활성화
 
+            // 감소하는 코루틴 실행 중 -> 중단하기
+            if (holdingCoroutine != null) StopCoroutine(holdingCoroutine);
+            // 충전하는 코루틴 시작
             holdingCoroutine = StartCoroutine(IncreaseChargeGauge());
         }
-        else if (Input.GetKeyUp(KeyCode.Space) && holdingCoroutine != null && !isStartWave)
+        else if (Input.GetKeyUp(KeyCode.Space) && !isStartWave)
         {
-            StopCoroutine(holdingCoroutine);
-            holdingCoroutine = StartCoroutine(DecreaseChargeGauge());
+            // 충전하는 코루틴 실행 중
+            if(holdingCoroutine != null)
+            {
+                // 코루틴 중단하기
+                StopCoroutine(holdingCoroutine);
+                // 감소하는 코루틴 시작
+                holdingCoroutine = StartCoroutine(DecreaseChargeGauge());
+            }
         }
+        // 감소하는 코루틴으로 모두 감소하면
         else if (chargeGauge <= 0 && holdingCoroutine != null)
         {
+            // 감소하는 코루틴 중단
             StopCoroutine(holdingCoroutine);
             holdingCoroutine = null;
             chargeGauge = 0;
 
-            gaugeSlider.gameObject.SetActive(false);
-            chargeTimeText.gameObject.SetActive(false);
+            gaugeSlider.gameObject.SetActive(false);    // 게이지 UI 비활성화
+            chargeTimeText.gameObject.SetActive(false); // 시간 UI 비활성화
         }
     }
 
@@ -171,6 +180,7 @@ public class GameManager : MonoBehaviour
         if(tutorial != null) tutorial.SetActive(false);
         startWave?.Invoke();
         isStartWave = true;
+        chargeGauge = 0;
         SetText();
     }
 
@@ -192,7 +202,7 @@ public class GameManager : MonoBehaviour
 
     public void SetUpgradeMission(StringBuilder sb, string name)
     {
-        UpgradeUI.transform.position = Camera.main.WorldToScreenPoint(upgradeTarget.position + new Vector3(0, -30f, 0));
+        UpgradeUI.transform.position = Camera.main.WorldToScreenPoint(upgradeTarget.position + Vector3.down * 8f);
         textStringBuilder.Clear();
         textStringBuilder.Append(name);
         buildingName.SetText(textStringBuilder);
@@ -227,6 +237,8 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        Time.timeScale = 0f;
+
         textStringBuilder.Clear();
         textStringBuilder.Append("Defeat");
         gameResultUI.gameObject.SetActive(true);
@@ -246,7 +258,6 @@ public class GameManager : MonoBehaviour
 
     public void QuitGame()
     {
-        UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
 }

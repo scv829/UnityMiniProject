@@ -12,7 +12,8 @@ public class InteractionArea : MonoBehaviour
 
     private void Start()
     {
-        // 상호 작용 기능이 있는 오브젝트냐 -> 이 스크립트가 있으면 무조건 있을텐데 혹시 모르는 예외처리
+        // 상호 작용 기능이 있는 오브젝트냐
+        // -> 이 스크립트가 있으면 무조건 있을텐데 혹시 모르는 예외처리
         if(InteractionObject.GetComponent<Interaction>() is not null)
         {
             interaction = InteractionObject.GetComponent<Interaction>();
@@ -25,10 +26,10 @@ public class InteractionArea : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         // 상호작용 가능한 오브젝트(유저) 이면서 웨이브(전투) 시작 전일때
-        if(other.gameObject.CompareTag("Player") && !GameManager.instance.IsStartWave)
+        if (other.gameObject.CompareTag("Player") && !GameManager.instance.IsStartWave)
         {
             if (!GameManager.instance.IsShowUpgradeUI) GameManager.instance.IsShowUpgradeUI = true;
 
@@ -49,7 +50,6 @@ public class InteractionArea : MonoBehaviour
             if (spot != null) spot.SetActive(true);
         }
     }
-
 
     private void OnTriggerExit(Collider other)
     {

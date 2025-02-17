@@ -37,9 +37,11 @@ public class PlayerCointroller : MonoBehaviour, IHit
     [SerializeField] GameObject dieEffect;
 
     [Header("Interact")]
-    [SerializeField] public UnityEvent interactEvent;
+    public UnityEvent interactEvent;
 
     private Coroutine attackCoroutine;
+
+    private Coroutine recoveryCoroutine;
 
     public void TakeDamage(int damage)
     {
@@ -50,6 +52,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
     private void Awake()
     {
         attackCoroutine = null;
+        recoveryCoroutine = null;
         hp = maxHp;
         animator = GetComponent<Animator>();
     }
@@ -81,16 +84,7 @@ public class PlayerCointroller : MonoBehaviour, IHit
         Rotate();
         Attack();
         Interact();
-        if (isDead) 
-        { 
-            Debug.Log("PlayerDead"); 
-            Destroy(gameObject);
-
-            GameObject obj = Instantiate(dieEffect);
-            obj.transform.position = transform.position;
-            Destroy(obj, 2f);
-        }
-
+        Die();
     }
 
     private void Move()
@@ -139,6 +133,23 @@ public class PlayerCointroller : MonoBehaviour, IHit
         interactEvent?.Invoke();
     }
 
+    private void Die()
+    {
+        if (isDead)
+        {
+            StopAllCoroutines();
+            
+            Debug.Log("PlayerDead");
+            Destroy(gameObject);
+
+            GameObject obj = Instantiate(dieEffect);
+            obj.transform.position = transform.position;
+            Destroy(obj, 2f);
+
+            GameManager.instance.GameOver();
+        }
+    }
+
     private IEnumerator attacking()
     {
         while (true)
@@ -160,6 +171,28 @@ public class PlayerCointroller : MonoBehaviour, IHit
         }
     }
 
+    private IEnumerator Recovery()
+    {
+        yield return new WaitForSeconds(3f);
+
+        while (true)
+        {
+
+            hp += Time.deltaTime;
+
+            if (hp >= maxHp)
+            {
+                hp = maxHp;
+                hpBar.value = hp;
+                break;
+            }
+
+            hpBar.value = hp;
+            yield return null;
+        }
+
+        hpBar.gameObject.SetActive(false);
+    }
     public void TakeDamage(float damage)
     {
         hpBar.gameObject.SetActive(true);
@@ -169,6 +202,13 @@ public class PlayerCointroller : MonoBehaviour, IHit
             isDead = true;
         }
         hpBar.value = hp;
+
+        if(recoveryCoroutine != null)
+        {
+            StopCoroutine(recoveryCoroutine);
+        }
+
+        recoveryCoroutine = StartCoroutine(Recovery());
     }
 
     public Transform HitPoint()

@@ -150,7 +150,7 @@ MonoBehaviour:
   maxHp: 10
   offset: 1
   dieEffect: {fileID: 4825124900785505853, guid: 47d596a594b414e4abd154419c639547, type: 3}
-  upgradeCost: 030000000500000008000000
+  upgradeCost: 000000000000000000000000
   currentLevel: 0
   useCoinCount: 0
   info: "\n\uD65C\uB85C \uACF5\uACA9\uC744 \uD558\uB294 \uD0C0\uC6CC\uC785\uB2C8\uB2E4."
